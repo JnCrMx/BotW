@@ -1,6 +1,7 @@
 package com.theredmajora.botw.render.player;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
@@ -17,7 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class LayerWeapon implements LayerRenderer<AbstractClientPlayer>
+public class LayerWeapon implements LayerRenderer<EntityPlayer>
 {
     private final RenderItem itemRenderer;
 	private float stacksRendered = 0;
@@ -27,8 +28,10 @@ public class LayerWeapon implements LayerRenderer<AbstractClientPlayer>
     	this.itemRenderer = itemRenderer;
 	}
 
-	public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	public void doRenderLayer(EntityPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {	
+		//System.out.println(entitylivingbaseIn);
+		
     	EntityPlayer player = (EntityPlayer) entitylivingbaseIn;
 
         for (ItemStack stack : player.inventory.mainInventory)
@@ -107,7 +110,7 @@ public class LayerWeapon implements LayerRenderer<AbstractClientPlayer>
             item.stackSize = 1;
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-
+            //TODO: Shield is too big
             {
                 GlStateManager.scale(2.0F, 2.0F, 2.0F);
 
@@ -115,6 +118,9 @@ public class LayerWeapon implements LayerRenderer<AbstractClientPlayer>
                 {
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                 }
+                
+                GlStateManager.rotate(180, 0, 1, 0);
+                GlStateManager.translate(-0.1, 0.3, -0.1);
 
                 GlStateManager.pushAttrib();
                 RenderHelper.enableStandardItemLighting();
