@@ -1,5 +1,8 @@
 package com.theredmajora.botw;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import com.theredmajora.botw.blocks.BOTWBlocks;
 
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
@@ -12,12 +15,20 @@ import com.theredmajora.botw.tileentities.TileEntityTempIce;
 
 import api.player.model.ModelPlayerAPI;
 import api.player.render.RenderPlayerAPI;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -49,5 +60,11 @@ public class BOTW
     	proxy.init();
 		MinecraftForge.EVENT_BUS.register(new BOTWEvents());
 		
+    }
+    
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
+    	proxy.postInit();
     }
 }
