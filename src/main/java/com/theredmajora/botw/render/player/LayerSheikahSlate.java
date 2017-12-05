@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class LayerSheikahSlate implements LayerRenderer<AbstractClientPlayer>
+public class LayerSheikahSlate implements LayerRenderer<EntityPlayer>
 {
 	private static final ResourceLocation TEXTURE_SLATE = new ResourceLocation("botw:textures/model/sheikah_slate.png");
     private final ModelSheikahSlate modelSlate = new ModelSheikahSlate();
@@ -26,11 +26,10 @@ public class LayerSheikahSlate implements LayerRenderer<AbstractClientPlayer>
     	this.renderPlayer = renderPlayer;
 	}
 
-	public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+	public void doRenderLayer(EntityPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {	
 		renderPlayer.bindTexture(TEXTURE_SLATE);
     	EntityPlayer player = (EntityPlayer) entitylivingbaseIn;
-
         for (ItemStack stack : player.inventory.mainInventory)
         {
         	if (stack != null && stack.getItem() instanceof ItemSheikahSlate)
