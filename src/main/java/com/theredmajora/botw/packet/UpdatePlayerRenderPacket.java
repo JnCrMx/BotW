@@ -1,14 +1,22 @@
 package com.theredmajora.botw.packet;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import com.theredmajora.botw.items.BOTWItems;
+import com.theredmajora.botw.items.ItemBOTWShield;
 import com.theredmajora.botw.items.ItemSheikahSlate;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemArrow;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -18,6 +26,8 @@ public class UpdatePlayerRenderPacket implements IMessage, IMessageHandler<Updat
 {
 	private int id;
 	private boolean hasSheikahSlate;
+	private boolean isHandgliding;
+	private ArrayList<ItemStack> backItems;
 	
 	public UpdatePlayerRenderPacket() {}
 	
@@ -25,12 +35,32 @@ public class UpdatePlayerRenderPacket implements IMessage, IMessageHandler<Updat
 	{
 		this.id=player.getEntityId();
 		this.hasSheikahSlate=false;
+		this.backItems=new ArrayList<>();
 		for (ItemStack stack : player.inventory.mainInventory)
         {
-        	if (stack != null && stack.getItem() instanceof ItemSheikahSlate)
-    		{
-        		this.hasSheikahSlate=true;
-    		}
+			if(stack != null)
+			{
+				ItemStack current = player.inventory.getCurrentItem();
+        		if(!(stack == current))
+        		{
+		        	if(stack.getItem() instanceof ItemSheikahSlate)
+		    		{
+		        		this.hasSheikahSlate=true;
+		    		}
+		        	else if(stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemBow)
+					{
+		        		this.backItems.add(stack);
+					}
+					else if(stack.getItem() instanceof ItemShield || stack.getItem() instanceof ItemBOTWShield)
+					{
+			        	this.backItems.add(stack);
+					}
+					else if(stack.getItem() instanceof ItemArrow)
+					{
+						this.backItems.add(stack);
+					}
+        		}
+			}
         }
 	}
 	
@@ -50,13 +80,21 @@ public class UpdatePlayerRenderPacket implements IMessage, IMessageHandler<Updat
 			if(player==null)
 				return null;
 			
+			for(int i=10;i<player.inventory.mainInventory.length;i++)
+				player.inventory.mainInventory[i]=null;
+			
 			if(message.hasSheikahSlate)
 			{
-				player.inventory.mainInventory[33]=new ItemStack(BOTWItems.sheikah_slate, 1);
+				player.inventory.mainInventory[10]=new ItemStack(BOTWItems.sheikah_slate, 1);
 			}
 			else
 			{
-				player.inventory.mainInventory[33]=null;
+				player.inventory.mainInventory[10]=null;
+			}
+			
+			for(int i=0;i<message.backItems.size();i++)
+			{
+				player.inventory.mainInventory[i+11]=message.backItems.get(i);
 			}
 		}
 		else
@@ -70,15 +108,39 @@ public class UpdatePlayerRenderPacket implements IMessage, IMessageHandler<Updat
 	@Override
 	public void fromBytes(ByteBuf buf) 
 	{
-		this.id=buf.readInt();
-		this.hasSheikahSlate=buf.readBoolean();
+		PacketBuffer buffer=new PacketBuffer(buf);
+		
+		this.id=buffer.readInt();
+		this.hasSheikahSlate=buffer.readBoolean();
+		
+		int size=buffer.readInt();
+		this.backItems=new ArrayList<>();
+		for(int i=0;i<size;i++)
+		{
+			try 
+			{
+				this.backItems.add(buffer.readItemStackFromBuffer());
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) 
 	{
-		buf.writeInt(id);
-		buf.writeBoolean(hasSheikahSlate);
+		PacketBuffer buffer=new PacketBuffer(buf);
+		
+		buffer.writeInt(id);
+		buffer.writeBoolean(hasSheikahSlate);
+		
+		buffer.writeInt(backItems.size());
+		for(int i=0;i<backItems.size();i++)
+		{
+			buffer.writeItemStackToBuffer(backItems.get(i));
+		}
 	}
 
 }
