@@ -282,6 +282,10 @@ public class ModelQuiver extends ModelBase
 				counted -= 1;
 			}
 		}
+		else if(player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() instanceof ItemArrow)
+		{
+			counted -= 1;
+		}
 		return counted;
 	}
   
