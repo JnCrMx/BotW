@@ -52,6 +52,7 @@ public class ItemBOTWShield extends ItemBOTW implements CustomItemRenderer
                 return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
             }
         });
+		setCreativeTab(BOTW.botwTabShields);
 	}
 	
 	@Override

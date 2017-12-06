@@ -11,6 +11,8 @@ import com.theredmajora.botw.packet.BOTWPacketHandler;
 import com.theredmajora.botw.proxy.CommonProxy;
 import com.theredmajora.botw.render.player.ModelRendererBase;
 import com.theredmajora.botw.render.player.PlayerRendererBase;
+import com.theredmajora.botw.tabs.BOTWTab;
+import com.theredmajora.botw.tabs.BOTWTabShields;
 import com.theredmajora.botw.tileentities.TileEntityTempIce;
 
 import api.player.model.ModelPlayerAPI;
@@ -44,8 +46,9 @@ public class BOTW
     
     @SidedProxy(clientSide="com.theredmajora.botw.proxy.ClientProxy", serverSide="com.theredmajora.botw.proxy.CommonProxy")
     public static CommonProxy proxy;
-    
+
     public static final BOTWTab botwTab = new BOTWTab();
+    public static final BOTWTabShields botwTabShields = new BOTWTabShields();
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)

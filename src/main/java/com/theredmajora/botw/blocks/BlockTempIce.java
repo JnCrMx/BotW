@@ -1,5 +1,6 @@
 package com.theredmajora.botw.blocks;
 
+import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.tileentities.BlockBOTWTE;
 import com.theredmajora.botw.tileentities.TileEntityTempIce;
 
@@ -25,6 +26,7 @@ public class BlockTempIce extends BlockBOTWTE
         this.slipperiness = 0.98F;
         this.setSoundType(SoundType.GLASS);
         this.setBlockUnbreakable();
+		setCreativeTab(BOTW.botwTab);
 	}
 
     public boolean isOpaqueCube(IBlockState state)

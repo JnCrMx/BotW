@@ -12,7 +12,6 @@ public class ItemBOTW extends Item
 		this.name = name;
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(BOTW.botwTab);
 	}
 
 	public void registerItemModel()
