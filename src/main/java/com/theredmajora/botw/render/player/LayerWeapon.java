@@ -1,5 +1,7 @@
 package com.theredmajora.botw.render.player;
 
+import com.theredmajora.botw.items.ItemBOTWShield;
+
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -50,7 +52,7 @@ public class LayerWeapon implements LayerRenderer<EntityPlayer>
         				}
         				else
         				{
-        					if(stack.getItem() instanceof ItemShield)
+        					if(stack.getItem() instanceof ItemShield || stack.getItem() instanceof ItemBOTWShield)
         					{
         						stacksRendered += 1F;
             					renderShieldItem(stack, player, stacksRendered);

@@ -76,22 +76,37 @@ public class ItemBOTWShield extends ItemBOTW implements CustomItemRenderer
 	@Override
 	public void render(ItemStack itemStackIn)
 	{
+        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(BOTW.MODID, "textures/items/shields/"+getRegistryName().getResourcePath()+".png"));
+		
 		GlStateManager.pushMatrix();
 		
-		/*GlStateManager.translate(0.15, 0.6, 0.6);
-		
-		GL11.glBegin(GL11.GL_POLYGON);
+		/*GL11.glBegin(GL11.GL_POLYGON);
 		{
 			for(double angle=0.0;angle<2*Math.PI;angle+=0.1)
 			{
+				GL11.glTexCoord2d(0.3, 0.3);
 				GL11.glVertex3d(Math.cos(angle)*0.5, 0, Math.sin(angle)*0.5);
 			}
 		}
 		GL11.glEnd();*/
 		
-        Minecraft.getMinecraft().getTextureManager().bindTexture(BannerTextures.SHIELD_BASE_TEXTURE);
-		GlStateManager.scale(1.0F, -1.0F, -1.0F);
-        new ModelShield().render();
+		GL11.glBegin(GL11.GL_QUADS);
+		{
+			{
+				GL11.glTexCoord2d(0, 0);
+				GL11.glVertex3d(0, 0, 0);
+	
+				GL11.glTexCoord2d(1, 0);
+				GL11.glVertex3d(1, 0, 0);
+	
+				GL11.glTexCoord2d(1, 1);
+				GL11.glVertex3d(1, 1, 0);
+	
+				GL11.glTexCoord2d(0, 1);
+				GL11.glVertex3d(0, 1, 0);
+			}
+		}
+		GL11.glEnd();
 		
 		GlStateManager.popMatrix();
 	}
