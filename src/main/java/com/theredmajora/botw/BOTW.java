@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import com.theredmajora.botw.blocks.BOTWBlocks;
 
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
+import com.theredmajora.botw.dimension.BOTWDimensions;
 import com.theredmajora.botw.items.BOTWItems;
 import com.theredmajora.botw.packet.BOTWPacketHandler;
 import com.theredmajora.botw.proxy.CommonProxy;
@@ -24,6 +25,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelManager;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -59,10 +61,10 @@ public class BOTW
     	BOTWItems.init();
     	BOTWKeyHandler.init();
     	BOTWPacketHandler.init();
+    	BOTWDimensions.init();
     	CapabilityItemTracker.register();
     	proxy.init();
 		MinecraftForge.EVENT_BUS.register(new BOTWEvents());
-		
     }
     
     @EventHandler

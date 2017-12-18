@@ -27,6 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -46,6 +47,7 @@ public class ClientProxy extends CommonProxy
 	public void init()
 	{
 		MinecraftForge.EVENT_BUS.register(this);
+		OBJLoader.INSTANCE.addDomain(BOTW.MODID);
 	}
 	
 	@Override
