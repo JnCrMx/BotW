@@ -1,26 +1,25 @@
 package com.theredmajora.botw.capability.itemtracker;
 
-import com.theredmajora.botw.util.ENUMClientPacketState;
+import java.util.List;
+
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public interface IItemTracker {
-
-	public boolean shouldRenderBow();
 	
 	public boolean shouldRenderSlate();
-	
 	public boolean shouldRenderGlider();
-	
-	public void setShouldRenderBow(boolean bool);
+	public List<ItemStack> getRenderingItemStacks();
+	public int getArrowCount();
 	
 	public void setShouldRenderSlate(boolean bool);
-	
 	public void setShouldRenderGlider(boolean bool);
+	public void setRenderingItemStacks(List<ItemStack> stacks);
+	public void setArrowCount(int count);
 	
-	public ENUMClientPacketState getPacketState();
-	
-	public void setPacketState(ENUMClientPacketState state);
-	
-	public void updateServer();
-		
-	
+	public int getEntityId();
+
+	public NBTTagCompound writeNBT();
+	public void readNBT(NBTTagCompound tag);
 }

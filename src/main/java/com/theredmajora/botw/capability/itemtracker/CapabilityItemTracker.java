@@ -1,15 +1,21 @@
 package com.theredmajora.botw.capability.itemtracker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import org.omg.IOP.TAG_CODE_SETS;
+
 import com.theredmajora.botw.BOTW;
-import com.theredmajora.botw.util.ENUMClientPacketState;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,6 +24,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -46,66 +53,100 @@ public class CapabilityItemTracker {
 	public static class ItemTracker implements IItemTracker
 	{
 		boolean shouldRenderBow, shouldRenderSlate, shouldRenderGlider;
-		ENUMClientPacketState packetState = ENUMClientPacketState.OLD;
+		int arrowCount;
+		List<ItemStack> stacks = new ArrayList<>();
 		EntityPlayer clientPlayer;
 
 		public ItemTracker(EntityPlayer player) {
-			// TODO Auto-generated constructor stub
 			this.clientPlayer = player;
 		}
 
 		@Override
-		public boolean shouldRenderBow() {
-			// TODO Auto-generated method stub
-			return shouldRenderBow;
-		}
-
-		@Override
 		public boolean shouldRenderSlate() {
-			// TODO Auto-generated method stub
 			return shouldRenderSlate;
 		}
 
 		@Override
 		public boolean shouldRenderGlider() {
-			// TODO Auto-generated method stub
 			return shouldRenderGlider;
 		}
 
 		@Override
-		public void setShouldRenderBow(boolean bool) {
-			// TODO Auto-generated method stub
-			this.shouldRenderBow = bool;
-		}
-
-		@Override
 		public void setShouldRenderSlate(boolean bool) {
-			// TODO Auto-generated method stub
 			this.shouldRenderSlate = bool;
 		}
 
 		@Override
 		public void setShouldRenderGlider(boolean bool) {
-			// TODO Auto-generated method stub
 			this.shouldRenderGlider = bool;
 		}
 
 		@Override
-		public ENUMClientPacketState getPacketState() {
-			// TODO Auto-generated method stub
-			return packetState;
+		public int getEntityId() {
+			return clientPlayer.getEntityId();
 		}
 
 		@Override
-		public void setPacketState(ENUMClientPacketState state) {
-			// TODO Auto-generated method stub
-			this.packetState = state;
+		public NBTTagCompound writeNBT()
+		{
+			NBTTagCompound tagCompound = new NBTTagCompound();
+			
+			tagCompound.setBoolean("RenderSlate", shouldRenderSlate());
+			tagCompound.setBoolean("RenderGlider", shouldRenderGlider());
+			tagCompound.setInteger("ArrowCount", getArrowCount());
+			
+			NBTTagList list=new NBTTagList();
+			for(int i=0; i<stacks.size(); i++)
+			{
+				ItemStack stack=stacks.get(i);
+				list.appendTag(stack.writeToNBT(new NBTTagCompound()));
+			}
+			tagCompound.setTag("items", list);
+			
+			return tagCompound;
 		}
 
 		@Override
-		public void updateServer() {
-			// TODO Auto-generated method stub
+		public void readNBT(NBTTagCompound tag)
+		{
+			setShouldRenderSlate(tag.getBoolean("RenderSlate"));
+			setShouldRenderGlider(tag.getBoolean("RenderGlider"));	
+			setArrowCount(tag.getInteger("ArrowCount"));
+			
+			NBTTagList list=tag.getTagList("items", Constants.NBT.TAG_COMPOUND);
+			stacks=new ArrayList<>();
+			for(int i=0; i<list.tagCount(); i++)
+			{
+				NBTTagCompound item=list.getCompoundTagAt(i);
+				ItemStack stack=new ItemStack(Items.GOLDEN_APPLE);
+				stack.readFromNBT(item);
+				
+				stacks.add(stack);
+			}
+		}
 
+		@Override
+		public List<ItemStack> getRenderingItemStacks()
+		{
+			return stacks;
+		}
+
+		@Override
+		public int getArrowCount()
+		{
+			return arrowCount;
+		}
+
+		@Override
+		public void setRenderingItemStacks(List<ItemStack> stacks)
+		{
+			this.stacks=stacks;
+		}
+
+		@Override
+		public void setArrowCount(int count)
+		{
+			this.arrowCount=count;
 		}
 	}
 
@@ -118,23 +159,13 @@ public class CapabilityItemTracker {
 
 		@Override
 		public NBTBase writeNBT(Capability<IItemTracker> capability, IItemTracker instance, EnumFacing side) {
-			NBTTagCompound tagCompound = new NBTTagCompound();
-
-			tagCompound.setBoolean("RenderBow", instance.shouldRenderBow());
-			tagCompound.setBoolean("RenderSlate", instance.shouldRenderSlate());
-			tagCompound.setBoolean("RenderGlider", instance.shouldRenderGlider());
-
-			return tagCompound;
+			return instance.writeNBT();
 		}
 
 		@Override
 		public void readNBT(Capability<IItemTracker> capability, IItemTracker instance, EnumFacing side, NBTBase nbt) {
-
 			NBTTagCompound tagCompound = (NBTTagCompound) nbt;
-
-			instance.setShouldRenderBow(tagCompound.getBoolean("RenderBow"));
-			instance.setShouldRenderSlate(tagCompound.getBoolean("RenderSlate"));
-			instance.setShouldRenderGlider(tagCompound.getBoolean("RenderGlider"));	
+			instance.readNBT(tagCompound);
 		}
 
 	}
@@ -158,8 +189,7 @@ public class CapabilityItemTracker {
 			{
 				if(e.getOriginal().hasCapability(BOTW_CAP, null))
 				{
-					IItemTracker newTracker = e.getEntityPlayer().getCapability(BOTW_CAP, null);
-					newTracker.setPacketState(ENUMClientPacketState.OLD);				   
+					IItemTracker newTracker = e.getEntityPlayer().getCapability(BOTW_CAP, null); //FIXME		   
 				}
 			}
 		}
