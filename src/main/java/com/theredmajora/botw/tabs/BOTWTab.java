@@ -1,5 +1,6 @@
-package com.theredmajora.botw;
+package com.theredmajora.botw.tabs;
 
+import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.items.BOTWItems;
 
 import net.minecraft.creativetab.CreativeTabs;

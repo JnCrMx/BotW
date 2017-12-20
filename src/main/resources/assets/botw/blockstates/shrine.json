@@ -1,0 +1,11 @@
+{
+    "forge_marker": 1,    
+    "variants": {
+        "normal": {
+            "model": "botw:obj/shrine_top1.obj"
+        },
+        "inventory": {
+            "model": "botw:obj/shrine_top1.obj"
+        }
+    }
+}
