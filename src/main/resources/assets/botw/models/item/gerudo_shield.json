@@ -1,0 +1,13 @@
+{
+    "parent": "botw:item/shield",
+    "overrides": 
+    [
+        {
+            "predicate": 
+            {
+                "blocking": 1
+            },
+            "model": "botw:item/shield_blocking"
+        }
+    ]
+}

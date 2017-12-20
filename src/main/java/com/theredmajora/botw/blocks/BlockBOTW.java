@@ -16,7 +16,6 @@ public class BlockBOTW extends Block
 		this.name = name;
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(BOTW.botwTab);
 	}
 
 	public void registerItemModel(ItemBlock itemBlock)

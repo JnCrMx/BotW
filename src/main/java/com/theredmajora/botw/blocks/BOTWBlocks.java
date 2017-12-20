@@ -9,10 +9,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class BOTWBlocks
 {
 	public static Block temp_ice;
+	public static Block shrine;
+	public static Block shrine_lift;
 	
 	public static void init()
 	{
 		temp_ice = register(new BlockTempIce());
+		shrine = register(new BlockShrine());
+		shrine_lift = register(new BlockShrineLift());
 	}
 	
 	private static <T extends Block> T register(T block, ItemBlock itemBlock)

@@ -1,5 +1,7 @@
 package com.theredmajora.botw.items;
 
+import com.theredmajora.botw.BOTW;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -13,6 +15,7 @@ public class ItemParaglider extends ItemBOTW
 	{
 		super("paraglider");
 		this.setMaxStackSize(1);
+		setCreativeTab(BOTW.botwTab);
 	}
 	
 	@Override

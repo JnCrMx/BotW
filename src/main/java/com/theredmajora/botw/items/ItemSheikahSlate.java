@@ -1,5 +1,7 @@
 package com.theredmajora.botw.items;
 
+import com.theredmajora.botw.BOTW;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +16,7 @@ public class ItemSheikahSlate extends ItemBOTW
 	{
 		super("sheikah_slate");
 		this.setMaxStackSize(1);
+		setCreativeTab(BOTW.botwTab);
 	}
 
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
