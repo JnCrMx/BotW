@@ -7,7 +7,6 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.packet.BOTWPacketHandler;
-import com.theredmajora.botw.packet.UpdatePlayerRenderPacket;
 import com.theredmajora.botw.render.item.CustomTileEntityItemStackRenderer;
 
 import net.minecraft.block.state.IBlockState;
@@ -46,7 +45,6 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void init()
 	{
-		MinecraftForge.EVENT_BUS.register(this);
 		OBJLoader.INSTANCE.addDomain(BOTW.MODID);
 	}
 	
@@ -54,21 +52,5 @@ public class ClientProxy extends CommonProxy
 	public void postInit()
 	{
 		TileEntityItemStackRenderer.instance=new CustomTileEntityItemStackRenderer();
-	}
-	
-	@SubscribeEvent
-	public void tick(TickEvent event)
-	{
-		if(event.type==Type.CLIENT)
-		{
-			if(event.phase==Phase.START)
-			{
-				if(Minecraft.getMinecraft().thePlayer!=null)
-				{
-					UpdatePlayerRenderPacket packet=new UpdatePlayerRenderPacket(Minecraft.getMinecraft().thePlayer);
-					BOTWPacketHandler.INSTANCE.sendToServer(packet);
-				}
-			}
-		}
 	}
 }

@@ -30,14 +30,7 @@ public class LayerSheikahSlate implements LayerRenderer<EntityPlayer>
     {	
 		renderPlayer.bindTexture(TEXTURE_SLATE);
     	EntityPlayer player = (EntityPlayer) entitylivingbaseIn;
-        for (ItemStack stack : player.inventory.mainInventory)
-        {
-        	if (stack != null && stack.getItem() instanceof ItemSheikahSlate)
-    		{
-                stack = player.inventory.getCurrentItem();
-                if(!(stack != null && stack.getItem() instanceof ItemSheikahSlate))
-                {
-                	{
+
                         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                         GlStateManager.enableBlend();
                         GlStateManager.pushMatrix();
@@ -54,10 +47,6 @@ public class LayerSheikahSlate implements LayerRenderer<EntityPlayer>
                         this.modelSlate.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
                         RenderHelper.disableStandardItemLighting();
                         GlStateManager.popMatrix();
-                    }
-                }
-    		}
-    	}
     }
     
     public boolean shouldCombineTextures()

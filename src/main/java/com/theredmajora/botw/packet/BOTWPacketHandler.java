@@ -42,8 +42,6 @@ public class BOTWPacketHandler {
 
 		
 		INSTANCE.registerMessage(UpdateClientPacket.class, UpdateClientPacket.class, 0, Side.CLIENT);
-		INSTANCE.registerMessage(UpdatePlayerRenderPacket.class, UpdatePlayerRenderPacket.class, 1, Side.CLIENT);
-		INSTANCE.registerMessage(UpdatePlayerRenderPacket.class, UpdatePlayerRenderPacket.class, 2, Side.SERVER);
 		
 		//will send packet from client to server
 		//INSTANCE.registerMessage(ExampleClientPacket.class, ExampleClientPacket.class, 0, Side.SERVER);
