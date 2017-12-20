@@ -5,7 +5,6 @@ import com.theredmajora.botw.BOTWEvents;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
 
 public class CommonProxy
 {

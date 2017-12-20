@@ -1,6 +1,5 @@
 package com.theredmajora.botw;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -8,19 +7,15 @@ import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker;
 import com.theredmajora.botw.items.ItemParaglider;
 import com.theredmajora.botw.items.ItemSheikahSlate;
-import com.theredmajora.botw.packet.BOTWPacketHandler;
-import com.theredmajora.botw.packet.itemTracker.UpdateClientPacket;
+import com.theredmajora.botw.util.ENUMClientPacketState;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -123,6 +118,7 @@ public class BOTWEvents
 		}
 	}
 
+	@SideOnly(Side.SERVER)
 	@SubscribeEvent
 	public void onServerTick(TickEvent.PlayerTickEvent event) 
 	{
@@ -141,77 +137,48 @@ public class BOTWEvents
 
 				if(!allPlayers.isEmpty())
 				{
-					IItemTracker[] trackers = new IItemTracker[allPlayers.size()];
-					
-					for(int i=0; i<trackers.length; i++)
+					for(EntityPlayer current : allPlayers)
 					{
-						EntityPlayer current=allPlayers.get(i);
 						IItemTracker tracker = current.getCapability(CapabilityItemTracker.BOTW_CAP, null);
 
 						if(tracker != null)
 						{
-							//if(tracker.getPacketState() == ENUMClientPacketState.OLD)
+							if(tracker.getPacketState() == ENUMClientPacketState.OLD)
 							{
-								Object[] hasRender = this.generateItemTrackerInformation(current);
+								boolean hasRender[] = this.generateItemTrackerInformation(player);
 								
-								tracker.setShouldRenderSlate((boolean) hasRender[0]);
-								tracker.setShouldRenderGlider((boolean) hasRender[1]);
-								tracker.setRenderingItemStacks(((List<ItemStack>) hasRender[2]));
-								tracker.setArrowCount((int) hasRender[3]);
+								tracker.setShouldRenderSlate(hasRender[0]);
+								tracker.setShouldRenderGlider(hasRender[1]);
+								tracker.setShouldRenderBow(hasRender[2]);
 								
-								//tracker.setPacketState(ENUMClientPacketState.NEW);
+								tracker.setPacketState(ENUMClientPacketState.NEW);
 							}
 						}
-						trackers[i]=tracker;
 					}
-					UpdateClientPacket packet = new UpdateClientPacket(trackers);
-					BOTWPacketHandler.INSTANCE.sendToAll(packet);
+					//Send the packet of information over to the client
 				}
 			}else
 				this.playerCheckCD--;
 		}
 	}
 
-	private Object[] generateItemTrackerInformation(EntityPlayer player)
+	@SideOnly(Side.SERVER)
+	private boolean[] generateItemTrackerInformation(EntityPlayer player)
 	{
-		Object render[] = {false, false, new ArrayList<ItemStack>(), 0};
+		boolean hasRender[] = {false, false, false};
 
 		for(ItemStack stack : player.inventory.mainInventory)
 		{
-			if(stack != null)
+			if(stack.getItem() instanceof  ItemSheikahSlate)
 			{
-				if(player.inventory.getCurrentItem() != stack)
-				{
-					if(stack.getItem() instanceof  ItemSheikahSlate)
-					{
-						render[0] = true;
-					}
-					if(stack.getItem() instanceof  ItemParaglider)
-					{
-						render[1] = true;
-					}
-					if(stack.getItem() instanceof ItemBow || stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemShield)
-					{
-						((ArrayList)render[2]).add(stack);
-					}
-				}
-				if(stack.getItem() instanceof ItemArrow)
-				{
-					render[3]=((int)render[3])+stack.stackSize;
-				}
+				hasRender[0] = true;
 			}
-		}
-		if(player.inventory.getCurrentItem() != null)
-		{
-			if(player.inventory.getCurrentItem().getItem() instanceof ItemBow || player.inventory.getCurrentItem().getItem() instanceof ItemArrow)
+			if(stack.getItem() instanceof  ItemParaglider)
 			{
-				if(((int)render[3])>0)
-				{
-					render[3]=((int)render[3])-1;
-				}
+				hasRender[1] = true;
 			}
 		}
 
-		return render;
+		return hasRender;
 	}
 }
