@@ -1,5 +1,8 @@
 package com.theredmajora.botw.render.player;
 
+import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
+import com.theredmajora.botw.capability.itemtracker.IItemTracker;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -218,7 +221,9 @@ public class ModelQuiver extends ModelBase
     	QuiverPart2.render(f5);
     	Quiver.render(f5);
     	
-    	if(countArrows((EntityPlayer)entity, Items.ARROW) >= 1)
+    	int arrows=countArrows((EntityPlayer) entity);
+    	
+    	if(arrows >= 1)
     	{
 			ARROW31.render(f5);
 			ARROW32.render(f5);
@@ -230,7 +235,7 @@ public class ModelQuiver extends ModelBase
 			ARROW38.render(f5);
 			ARROW39.render(f5);
     	}
-		if(countArrows((EntityPlayer)entity, Items.ARROW) >= 2)
+		if(arrows >= 2)
 		{
 			ARROW11.render(f5);
     		ARROW12.render(f5);
@@ -242,7 +247,7 @@ public class ModelQuiver extends ModelBase
         	ARROW18.render(f5);
         	ARROW19.render(f5);
 		}
-    	if(countArrows((EntityPlayer)entity, Items.ARROW) >= 3)
+    	if(arrows >= 3)
     	{
     		ARROW21.render(f5);
     		ARROW22.render(f5);
@@ -263,30 +268,10 @@ public class ModelQuiver extends ModelBase
     	model.rotateAngleZ = z;
     }
     
-    public int countArrows(EntityPlayer player, Item item)
+    public int countArrows(EntityPlayer player)
 	{
-		int counted = 0;
-		
-		for (ItemStack stack : player.inventory.mainInventory)
-    	{
-			if(stack != null && stack.getItem() instanceof ItemArrow)
-			{
-				counted += stack.stackSize;
-			}
-		}
-
-		if(player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() instanceof ItemBow)
-		{
-			if(player.getItemInUseCount() >= 1)
-			{
-				counted -= 1;
-			}
-		}
-		else if(player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() instanceof ItemArrow)
-		{
-			counted -= 1;
-		}
-		return counted;
+    	IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_CAP, null);
+		return tracker.getArrowCount();
 	}
   
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)

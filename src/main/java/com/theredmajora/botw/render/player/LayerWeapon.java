@@ -1,5 +1,7 @@
 package com.theredmajora.botw.render.player;
 
+import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
+import com.theredmajora.botw.capability.itemtracker.IItemTracker;
 import com.theredmajora.botw.items.ItemBOTWShield;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -35,8 +37,9 @@ public class LayerWeapon implements LayerRenderer<EntityPlayer>
 		//System.out.println(entitylivingbaseIn);
 		
     	EntityPlayer player = (EntityPlayer) entitylivingbaseIn;
+    	IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_CAP, null);
 
-        for (ItemStack stack : player.inventory.mainInventory)
+        for (ItemStack stack : tracker.getRenderingItemStacks())
         {
         	if (stack != null)
     		{
