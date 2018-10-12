@@ -1,8 +1,6 @@
 package com.theredmajora.botw.item;
 
 import com.theredmajora.botw.BOTW;
-import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
-import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;

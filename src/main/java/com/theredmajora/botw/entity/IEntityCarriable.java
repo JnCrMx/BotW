@@ -1,10 +1,6 @@
 package com.theredmajora.botw.entity;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.Vec3d;
 
 public interface IEntityCarriable
 {

@@ -5,7 +5,6 @@ import java.util.List;
 import com.theredmajora.botw.capability.ITracker;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public interface IItemTracker extends ITracker{
 	

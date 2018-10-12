@@ -6,7 +6,6 @@ import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.entity.EntityExplosiveBarrel;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;

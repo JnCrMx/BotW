@@ -3,24 +3,12 @@ package com.theredmajora.botw.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import com.theredmajora.botw.BOTW;
-import com.theredmajora.botw.block.BOTWBlocks;
 import com.theredmajora.botw.entity.EntityShrineLift;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderFallingBlock;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,10 +28,7 @@ public class RenderShrineLift extends Render<EntityShrineLift>
 	
 	@Override
 	public void doRender(EntityShrineLift entity, double x, double y, double z, float entityYaw, float partialTicks)
-	{
-		IBlockState iblockstate=BOTWBlocks.shrine_lift.getDefaultState();
-		World world = entity.worldObj;
-		
+	{		
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
         GlStateManager.disableLighting();

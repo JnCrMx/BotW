@@ -3,16 +3,13 @@ package com.theredmajora.botw.render;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Quaternion;
 
 import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
-import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker.PlayerTracker;
 import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
 import com.theredmajora.botw.proxy.ClientProxy;
 
@@ -22,24 +19,18 @@ import net.minecraft.client.model.ModelGuardian;
 import net.minecraft.client.model.ModelShulker;
 import net.minecraft.client.model.ModelWitch;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderBat;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.actors.threadpool.Arrays;
 
 @SideOnly(Side.CLIENT)
 public class RenderHook extends Render

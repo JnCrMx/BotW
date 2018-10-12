@@ -2,7 +2,6 @@ package com.theredmajora.botw.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 
 public class TileEntityShrineLift extends TileEntity
 {

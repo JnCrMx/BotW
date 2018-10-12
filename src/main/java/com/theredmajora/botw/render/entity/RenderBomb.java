@@ -1,23 +1,15 @@
 package com.theredmajora.botw.render.entity;
 
-import java.awt.Color;
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-
 import org.lwjgl.opengl.GL11;
 
 import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.entity.EntityBomb;
 import com.theredmajora.botw.entity.EntityBomb.BombType;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

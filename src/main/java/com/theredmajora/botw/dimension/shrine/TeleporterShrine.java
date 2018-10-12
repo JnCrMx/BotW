@@ -1,14 +1,11 @@
 package com.theredmajora.botw.dimension.shrine;
 
 import com.theredmajora.botw.block.BOTWBlocks;
-import com.theredmajora.botw.block.BlockShrineLift;
 import com.theredmajora.botw.dimension.BOTWDimensions;
 import com.theredmajora.botw.entity.EntityShrineLift;
 import com.theredmajora.botw.tileentity.TileEntityShrineLift;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

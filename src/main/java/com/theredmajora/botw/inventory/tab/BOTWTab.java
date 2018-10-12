@@ -5,7 +5,6 @@ import com.theredmajora.botw.item.BOTWItems;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public class BOTWTab extends CreativeTabs
 {

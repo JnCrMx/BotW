@@ -2,7 +2,8 @@ package com.theredmajora.botw.packet;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.List;
+
+import com.theredmajora.botw.capability.ITracker;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -16,10 +17,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-
-import com.theredmajora.botw.capability.ITracker;
-import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
-import com.theredmajora.botw.capability.itemtracker.IItemTracker;
 
 public class UpdateClientPacket implements IMessage, IMessageHandler<UpdateClientPacket, IMessage>
 { 

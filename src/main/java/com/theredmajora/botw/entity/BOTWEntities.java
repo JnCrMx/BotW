@@ -2,17 +2,11 @@ package com.theredmajora.botw.entity;
 
 import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.render.entity.RenderBomb;
-import com.theredmajora.botw.render.entity.RenderCustomLiving;
 import com.theredmajora.botw.render.entity.RenderExplosiveBarrel;
 import com.theredmajora.botw.render.entity.RenderShrineLift;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelArmorStand;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderEntityItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;

@@ -5,14 +5,11 @@ import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker.BOTWRenderAction;
 import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
 import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
-import com.theredmajora.botw.entity.EntityBomb;
 import com.theredmajora.botw.entity.IEntityCarriable;
 import com.theredmajora.botw.item.BOTWItems;
-import com.theredmajora.botw.packet.BOTWActionPacket.BOTWPlayerAction;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -56,7 +53,7 @@ public class BOTWActionPacket implements IMessage, IMessageHandler<BOTWActionPac
 	{
 		if(ctx.side.isServer())
 		{
-			EntityPlayer player = (EntityPlayer) ctx.getServerHandler().playerEntity;
+			EntityPlayer player = ctx.getServerHandler().playerEntity;
 			World world = player.worldObj;
 			
 			if(message.action==BOTWPlayerAction.THROW_ENTITY)

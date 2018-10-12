@@ -2,13 +2,10 @@ package com.theredmajora.botw.capability;
 
 import java.lang.reflect.Field;
 
-import com.theredmajora.botw.packet.BOTWPacketHandler;
 import com.theredmajora.botw.packet.UpdateClientPacket;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Base interface for capability trackers

@@ -2,8 +2,6 @@ package com.theredmajora.botw.capability.playertracker;
 
 import com.theredmajora.botw.capability.ITracker;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 public interface IPlayerTracker extends ITracker
 {
 	public int getMaxStamina();

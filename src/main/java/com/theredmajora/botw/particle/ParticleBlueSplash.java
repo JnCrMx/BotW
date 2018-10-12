@@ -1,14 +1,8 @@
 package com.theredmajora.botw.particle;
 
-import com.theredmajora.botw.BOTW;
-
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ParticleBlueSplash extends Particle
 {

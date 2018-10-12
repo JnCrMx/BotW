@@ -1,6 +1,7 @@
 package com.theredmajora.botw.item;
 
 import com.theredmajora.botw.BOTW;
+
 import net.minecraft.item.Item;
 
 public class ItemBOTW extends Item

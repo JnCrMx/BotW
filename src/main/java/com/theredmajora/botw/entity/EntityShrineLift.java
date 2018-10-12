@@ -5,15 +5,12 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.theredmajora.botw.block.BOTWBlocks;
-import com.theredmajora.botw.block.BlockShrineLift;
 import com.theredmajora.botw.tileentity.TileEntityShrineLift;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
@@ -161,7 +158,7 @@ public class EntityShrineLift extends EntityGolem
 			setHeight(getHeight()+0.1f);
 		}
 		
-		setEntityBoundingBox(LIFT_AABB.offset(getPosition()).expand(0, (double)getHeight(), 0));
+		setEntityBoundingBox(LIFT_AABB.offset(getPosition()).expand(0, getHeight(), 0));
 
 		double y2 = getEntityBoundingBox().maxY;
 		

@@ -1,8 +1,5 @@
 package com.theredmajora.botw;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import com.theredmajora.botw.block.BOTWBlocks;
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
@@ -15,32 +12,18 @@ import com.theredmajora.botw.packet.BOTWPacketHandler;
 import com.theredmajora.botw.proxy.CommonProxy;
 import com.theredmajora.botw.render.player.ModelRendererBase;
 import com.theredmajora.botw.render.player.PlayerRendererBase;
-import com.theredmajora.botw.tileentity.TileEntityTempIce;
 import com.theredmajora.botw.world.WorldTypeHyrule;
 
 import api.player.model.ModelPlayerAPI;
-import api.player.model.ModelPlayerBaseSorting;
 import api.player.render.RenderPlayerAPI;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelManager;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldType;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = BOTW.MODID, name = BOTW.MODNAME, version = BOTW.VERSION)
 public class BOTW

@@ -2,11 +2,9 @@ package com.theredmajora.botw.tileentity;
 
 import com.theredmajora.botw.block.BOTWBlocks;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.MathHelper;
 
 public class TileEntityTempIce extends TileEntity implements ITickable
 {

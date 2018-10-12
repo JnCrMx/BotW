@@ -7,9 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.function.Predicate;
-
-import org.lwjgl.input.Keyboard;
 
 import com.theredmajora.botw.capability.ITracker;
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
@@ -17,25 +14,22 @@ import com.theredmajora.botw.capability.itemtracker.IItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker.BOTWRenderAction;
 import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
 import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
-import com.theredmajora.botw.entity.EntityBomb;
 import com.theredmajora.botw.entity.IEntityCarriable;
 import com.theredmajora.botw.gui.GuiSheikahSlate;
 import com.theredmajora.botw.gui.GuiStaminaOverlay;
 import com.theredmajora.botw.item.BOTWItems;
-import com.theredmajora.botw.item.ItemBOTW;
 import com.theredmajora.botw.item.ItemBOTWShield;
 import com.theredmajora.botw.item.ItemParaglider;
 import com.theredmajora.botw.item.ItemSheikahSlate;
 import com.theredmajora.botw.packet.BOTWActionPacket;
+import com.theredmajora.botw.packet.BOTWActionPacket.BOTWPlayerAction;
 import com.theredmajora.botw.packet.BOTWPacketHandler;
 import com.theredmajora.botw.packet.UpdateClientPacket;
-import com.theredmajora.botw.packet.BOTWActionPacket.BOTWPlayerAction;
 import com.theredmajora.botw.proxy.ClientProxy;
 
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -52,11 +46,8 @@ import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -64,7 +55,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -72,12 +62,9 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -85,7 +72,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.actors.threadpool.Arrays;
 
 public class BOTWEvents
 {
@@ -302,33 +288,30 @@ public class BOTWEvents
 
 				for (Entity entityFound: nearby)
 				{
-					if (entityFound instanceof Entity)
+					if(entityFound instanceof EntityArrow)
 					{
-						if(entityFound instanceof EntityArrow)
-						{
-							if(!(((EntityArrow)entityFound).shootingEntity instanceof EntityPlayer))
-							{
-								entityFound.motionX /= 2.5;
-								entityFound.motionY /= 2.5;
-								entityFound.motionZ /= 2.5;
-							}
-							else
-							{
-								/**I think it's because I have to override when the arrow shoots.
-								 * There's a forge event for that.
-								 * From what I found out, the arrow gets motionY from the player and shoots from that,
-								 * so when motionY is getting divided, so is the arrows motion.
-								 * 
-								 * Look in the arrow class for clues!
-								 */
-							}
-						}
-						else
+						if(!(((EntityArrow)entityFound).shootingEntity instanceof EntityPlayer))
 						{
 							entityFound.motionX /= 2.5;
 							entityFound.motionY /= 2.5;
 							entityFound.motionZ /= 2.5;
 						}
+						else
+						{
+							/**I think it's because I have to override when the arrow shoots.
+							 * There's a forge event for that.
+							 * From what I found out, the arrow gets motionY from the player and shoots from that,
+							 * so when motionY is getting divided, so is the arrows motion.
+							 * 
+							 * Look in the arrow class for clues!
+							 */
+						}
+					}
+					else
+					{
+						entityFound.motionX /= 2.5;
+						entityFound.motionY /= 2.5;
+						entityFound.motionZ /= 2.5;
 					}
 				}
 			}

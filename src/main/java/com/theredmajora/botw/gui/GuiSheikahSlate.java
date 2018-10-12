@@ -1,8 +1,6 @@
 package com.theredmajora.botw.gui;
 
-import java.awt.Color;
 import java.io.IOException;
-import java.util.BitSet;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -15,7 +13,6 @@ import com.theredmajora.botw.packet.BOTWActionPacket.BOTWPlayerAction;
 import com.theredmajora.botw.packet.BOTWPacketHandler;
 
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -23,14 +20,11 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 
 public class GuiSheikahSlate extends GuiScreen
 {
 	public static final int GUI_ID = 0;
 	private static final ResourceLocation SHEIKAH_SLATE_GUI_TEXTURES = new ResourceLocation(BOTW.MODID, "textures/gui/sheikah_slate.png");
-	
-	private ItemStack slate;
 	
 	private boolean hasCamera;
 	private int remoteBombLevel;
@@ -43,8 +37,6 @@ public class GuiSheikahSlate extends GuiScreen
 	
 	public GuiSheikahSlate(ItemStack slate)
 	{
-		this.slate=slate;
-		
 		// Every change to "ItemStack slate" or "NBTTagCompound tag" is just temporary.
 		// Changes should be submitted by BOTWActionPacket in onGuiClosed()
 		if (!slate.hasTagCompound())

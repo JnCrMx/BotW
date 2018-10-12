@@ -5,8 +5,8 @@ import com.theredmajora.botw.entity.EntityBomb;
 import com.theredmajora.botw.entity.EntityBomb.BombType;
 import com.theredmajora.botw.packet.BOTWActionPacket;
 import com.theredmajora.botw.packet.BOTWActionPacket.BOTWPlayerAction;
-import com.theredmajora.botw.proxy.ClientProxy;
 import com.theredmajora.botw.packet.BOTWPacketHandler;
+import com.theredmajora.botw.proxy.ClientProxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -20,7 +20,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class ItemSheikahSlate extends ItemBOTW

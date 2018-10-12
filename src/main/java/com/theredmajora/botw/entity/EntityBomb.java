@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 import com.theredmajora.botw.item.ItemBOTWShield;
 import com.theredmajora.botw.item.ItemParaglider;
-import com.theredmajora.botw.packet.BOTWActionPacket;
-import com.theredmajora.botw.packet.BOTWPacketHandler;
-import com.theredmajora.botw.packet.BOTWActionPacket.BOTWPlayerAction;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -74,13 +71,6 @@ public class EntityBomb extends EntityLivingBase implements IEntityCarriable
 				
 				SPacketSetPassengers packet=new SPacketSetPassengers(player);
 				((EntityPlayerMP)player).connection.sendPacket(packet);
-				
-				return EnumActionResult.SUCCESS;
-			}
-			else
-			{
-				//player.removePassengers();
-				return EnumActionResult.SUCCESS;
 			}
 		}
 		return EnumActionResult.SUCCESS;
@@ -179,7 +169,7 @@ public class EntityBomb extends EntityLivingBase implements IEntityCarriable
 	
 	public BombType getBombType()
 	{
-		return BombType.values()[((Integer)this.dataManager.get(BOMB_TYPE)).intValue()];
+		return BombType.values()[this.dataManager.get(BOMB_TYPE).intValue()];
 	}
 	
 	public static enum BombType

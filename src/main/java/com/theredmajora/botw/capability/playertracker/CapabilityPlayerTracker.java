@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.function.BiFunction;
 
 import com.theredmajora.botw.BOTW;
-import com.theredmajora.botw.capability.itemtracker.IItemTracker;
 import com.theredmajora.botw.capability.Storage;
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
-import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker.ItemTracker;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -224,7 +221,6 @@ public class CapabilityPlayerTracker
 
 		@SubscribeEvent
 		public void onPlayerCloned(PlayerEvent.Clone e) {
-			NBTTagCompound nbt = new NBTTagCompound();
 
 			if(e.isWasDeath())
 			{

@@ -1,29 +1,18 @@
 package com.theredmajora.botw.render.player;
 
-import org.lwjgl.opengl.GL11;
-
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker.BOTWRenderAction;
-import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
-import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
-import com.theredmajora.botw.entity.EntityBomb;
 import com.theredmajora.botw.entity.IEntityCarriable;
 import com.theredmajora.botw.item.ItemParaglider;
 import com.theredmajora.botw.item.ItemSheikahSlate;
-import com.theredmajora.botw.packet.BOTWActionPacket;
-import com.theredmajora.botw.packet.BOTWPacketHandler;
-import com.theredmajora.botw.packet.BOTWActionPacket.BOTWPlayerAction;
 
 import api.player.model.ModelPlayerAPI;
 import api.player.model.ModelPlayerBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;

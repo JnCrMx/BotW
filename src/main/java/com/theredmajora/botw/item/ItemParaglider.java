@@ -3,7 +3,6 @@ package com.theredmajora.botw.item;
 import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
 import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
-import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker.PlayerTracker;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

@@ -10,9 +10,6 @@ import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 
@@ -42,7 +39,7 @@ public class GuiStaminaOverlay extends Gui
 		int centerY=client.displayHeight/4;		
 		if(client.gameSettings.thirdPersonView==0)
 		{
-			centerX=(int) (client.displayWidth/9);
+			centerX=client.displayWidth/9;
 			centerY=(int) (client.displayHeight/2.25);
 		}		
 		int baseRadius = client.displayWidth/95;
@@ -52,7 +49,6 @@ public class GuiStaminaOverlay extends Gui
 		{
 			color = Color.RED.getRGB();
 		}
-		final int WHITE = Color.WHITE.getRGB();
 		
 		if(playerTracker.getMaxStamina()==1000)
 		{
@@ -133,10 +129,10 @@ public class GuiStaminaOverlay extends Gui
 	
 	private static void drawRing(int cx, int cy, int radius, int width, int degrees, int color)
 	{
-		float f3 = (float)(color >> 24 & 255) / 255.0F;
-        float f = (float)(color >> 16 & 255) / 255.0F;
-        float f1 = (float)(color >> 8 & 255) / 255.0F;
-        float f2 = (float)(color & 255) / 255.0F;
+		float f3 = (color >> 24 & 255) / 255.0F;
+        float f = (color >> 16 & 255) / 255.0F;
+        float f1 = (color >> 8 & 255) / 255.0F;
+        float f2 = (color & 255) / 255.0F;
         
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();

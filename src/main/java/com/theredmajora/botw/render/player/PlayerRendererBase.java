@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
 
 public class PlayerRendererBase extends RenderPlayerBase
 {
@@ -31,7 +30,7 @@ public class PlayerRendererBase extends RenderPlayerBase
 		super.renderLayers(entity, f1, f2, f3, f4, f5, f6, f7);
 		for (LayerRenderer renderer : layerRenderer)
 		{
-			renderer.doRenderLayer((EntityLivingBase) entity, f1, f2, f3, f4, f5, f6, f7);
+			renderer.doRenderLayer(entity, f1, f2, f3, f4, f5, f6, f7);
 		}
 	}
 	

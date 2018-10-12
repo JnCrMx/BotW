@@ -1,7 +1,5 @@
 package com.theredmajora.botw.capability;
 
-import com.theredmajora.botw.capability.itemtracker.IItemTracker;
-
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

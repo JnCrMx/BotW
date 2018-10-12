@@ -55,11 +55,6 @@ public class EntityExplosiveBarrel extends EntityLivingBase implements IEntityCa
 					
 					return EnumActionResult.SUCCESS;
 				}
-				else
-				{
-					//player.removePassengers();
-					return EnumActionResult.SUCCESS;
-				}
 			}
 			else
 			{
@@ -68,8 +63,7 @@ public class EntityExplosiveBarrel extends EntityLivingBase implements IEntityCa
 		}
 		if(stack!=null && stack.getItem()==BOTWItems.sheikahSlate)
 			return EnumActionResult.PASS;
-		else
-			return EnumActionResult.FAIL;
+		return EnumActionResult.FAIL;
 	}
 	
 	@Override
