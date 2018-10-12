@@ -2,7 +2,7 @@ package com.theredmajora.botw.render.player;
 
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker;
-import com.theredmajora.botw.items.ItemBOTWShield;
+import com.theredmajora.botw.item.ItemBOTWShield;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -37,7 +37,7 @@ public class LayerWeapon implements LayerRenderer<EntityPlayer>
 		//System.out.println(entitylivingbaseIn);
 		
     	EntityPlayer player = (EntityPlayer) entitylivingbaseIn;
-    	IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_CAP, null);
+    	IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
 
         for (ItemStack stack : tracker.getRenderingItemStacks())
         {
@@ -115,7 +115,7 @@ public class LayerWeapon implements LayerRenderer<EntityPlayer>
             item.stackSize = 1;
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-            //TODO: Shield is too big
+            //TODO: Minecraft ItemShield is too big
             {
                 GlStateManager.scale(2.0F, 2.0F, 2.0F);
 

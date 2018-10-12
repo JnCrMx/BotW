@@ -1,0 +1,40 @@
+item.gerudo_shield.name=Gerudoschild
+item.hylia_shield.name=Hyliaschild
+item.sheikah_slate.name=Shiekah-Stein
+item.paraglider.name=Paragleiter
+item.stamina_vessel.name=Ausdauercontainer
+item.heart_container.name=Herzcontainer
+item.spirit_orb.name=Zeichen der Bewährung
+item.debug_tool.name=Hyperlink-Debugger
+
+tile.temp_ice.name=Shiekah-Eis
+tile.shrine.name=Schrein
+tile.shrine_lift.name=Schreinaufzug
+
+itemGroup.botw=TLoZ: Breath of the Wild
+itemGroup.botw.shields=TLoZ: Breath of the Wild: Schilde
+
+slate.mode.round_bombs=Runde Bomben
+
+key.botw.category=TLoZ: Breath of the Wild
+key.throw_entity.desc=Objekt werfen
+key.drop_entity.desc=Objekt fallen lassen
+key.select_sheikah_module.desc=Shiekah-Modul auswählen
+
+entity.botw.SheikahBomb.name=Shiekah-Bombe
+entity.botw.ExplosiveBarrel.name=explosives Fass
+
+generator.hyrule=Hyrule
+
+message.goddess.start=Du hast Herausforderungen bestanden und §bZeichen der Bewährung§r erhalten...
+message.goddess.select=Für §c4§r §bZeichen der Bewährung§r kann ich dir neue Kraft gewähren. Was ist dein Begehr?
+message.goddess.select.heart=Du möchtest einen zusätzlichen §bHerzcontainer§r? Dann klicke erneut.
+message.goddess.select.stamina=Du möchtest einen zusätzlichen §bAusdauercontainer§r? Dann klicke erneut.
+message.goddess.success=So sei es!
+message.goddess.go_on=Du scheinst noch weitere §bZeichen der Bewährung§r zu besitzen. Klicke mich erneut an, um weitere Kräfte zu erhalten.
+message.goddess.not_enough.1=Ich will dir neue Kraft gewähren.
+message.goddess.not_enough.2=Doch du besitzt noch keine §c4§r §bZeichen der Bewährung§r.
+message.goddess.not_enough.3=Suche die §cSchreine§r in diesem Reich und stelle dich ihren Herausforderungen.
+message.goddess.not_enough.4=Sobald du §c4§r Zeichen der Bewährung empfangen hast, kehre zu mir zurück.
+message.goddess.other=Störe das §bheilige Ritutal§r nicht!
+message.goddess.exit=Bringe den Frieden nach Hyrule zurück...

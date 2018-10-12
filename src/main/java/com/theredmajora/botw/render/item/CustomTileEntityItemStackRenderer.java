@@ -16,7 +16,7 @@ public class CustomTileEntityItemStackRenderer extends TileEntityItemStackRender
 		}
 		else
 		{
-			super.renderByItem(itemStackIn);	//Don´t forget this
+			super.renderByItem(itemStackIn);	//Don't forget this
 		}
 	}
 }

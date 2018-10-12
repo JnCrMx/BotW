@@ -2,7 +2,7 @@ package com.theredmajora.botw.render.player;
 
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker;
-import com.theredmajora.botw.items.ItemSheikahSlate;
+import com.theredmajora.botw.item.ItemSheikahSlate;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,7 +33,7 @@ public class LayerSheikahSlate implements LayerRenderer<EntityPlayer>
 		renderPlayer.bindTexture(TEXTURE_SLATE);
     	EntityPlayer player = (EntityPlayer) entitylivingbaseIn;
 
-    	IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_CAP, null);
+    	IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
     	
         if(tracker.shouldRenderSlate())
         {

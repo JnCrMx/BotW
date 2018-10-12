@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "facing=north,part=top": {"model": "botw:statue_of_the_goddess_top"},
+        "facing=north,part=bottom": {"model": "botw:statue_of_the_goddess_bottom"},
+        
+        "facing=east,part=top": {"model": "botw:statue_of_the_goddess_top", "y": 90},
+        "facing=east,part=bottom": {"model": "botw:statue_of_the_goddess_bottom", "y": 90},
+        
+        "facing=south,part=top": {"model": "botw:statue_of_the_goddess_top", "y": 180},
+        "facing=south,part=bottom": {"model": "botw:statue_of_the_goddess_bottom", "y": 180},
+        
+        "facing=west,part=top": {"model": "botw:statue_of_the_goddess_top", "y": 270},
+        "facing=west,part=bottom": {"model": "botw:statue_of_the_goddess_bottom", "y": 270}
+    }
+}

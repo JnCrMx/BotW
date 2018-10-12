@@ -2,15 +2,15 @@
 {
   "modid": "botw",
   "name": "Breath of the Wild",
-  "description": "The mod for Minecraft.",
+  "description": "A mod for Minecraft adding Breath of the Wild content.",
   "version": "1.0",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/wip-mods/2782182-breath-of-the-wild-a-mod-by-theredmajora",
   "updateUrl": "",
-  "authorList": ["TheRedMajora"],
+  "authorList": ["TheRedMajora", "JCM", "Chocokeks"],
   "credits": "Nintendo, for the great game.",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "dependencies": ["RenderPlayerAPI"]
 }
 ]

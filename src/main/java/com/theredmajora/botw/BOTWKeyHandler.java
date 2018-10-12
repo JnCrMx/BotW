@@ -11,9 +11,13 @@ public class BOTWKeyHandler
 	
 	public static void init()
 	{
-		keyBindings = new KeyBinding[1]; 
-		  
+		keyBindings = new KeyBinding[4]; 
+
 		keyBindings[0] = new KeyBinding("key.offhandequip.desc", Keyboard.KEY_SEMICOLON, "key.gameplay.category");
+		
+		keyBindings[1] = new KeyBinding("key.throw_entity.desc", Keyboard.KEY_B, "key.botw.category");
+		keyBindings[2] = new KeyBinding("key.drop_entity.desc", Keyboard.KEY_V, "key.botw.category");
+		keyBindings[3] = new KeyBinding("key.select_sheikah_module.desc", Keyboard.KEY_C, "key.botw.category");
 
 		for (int i = 0; i < keyBindings.length; ++i) 
 		{

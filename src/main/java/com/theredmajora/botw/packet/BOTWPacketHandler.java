@@ -1,7 +1,7 @@
 package com.theredmajora.botw.packet;
 
 import com.theredmajora.botw.BOTW;
-import com.theredmajora.botw.packet.itemTracker.UpdateClientPacket;
+
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -42,6 +42,8 @@ public class BOTWPacketHandler {
 
 		
 		INSTANCE.registerMessage(UpdateClientPacket.class, UpdateClientPacket.class, 0, Side.CLIENT);
+		
+		INSTANCE.registerMessage(BOTWActionPacket.class, BOTWActionPacket.class, 1, Side.SERVER);
 		
 		//will send packet from client to server
 		//INSTANCE.registerMessage(ExampleClientPacket.class, ExampleClientPacket.class, 0, Side.SERVER);

@@ -270,7 +270,7 @@ public class ModelQuiver extends ModelBase
     
     public int countArrows(EntityPlayer player)
 	{
-    	IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_CAP, null);
+    	IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
 		return tracker.getArrowCount();
 	}
   

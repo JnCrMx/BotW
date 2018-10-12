@@ -27,7 +27,7 @@ public class WorldProviderShrine extends WorldProvider
 	@Override
 	public boolean canRespawnHere() 
 	{
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class WorldProviderShrine extends WorldProvider
 	@Override
 	public boolean isSurfaceWorld()
 	{
-		return true;
+		return false;
 	}
 	
 	@Override

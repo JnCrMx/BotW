@@ -27,7 +27,7 @@ public class PlayerRendererBase extends RenderPlayerBase
 	
 	@Override
 	public void renderLayers(AbstractClientPlayer entity, float f1, float f2, float f3, float f4, float f5, float f6, float f7)
-	{
+	{		
 		super.renderLayers(entity, f1, f2, f3, f4, f5, f6, f7);
 		for (LayerRenderer renderer : layerRenderer)
 		{
@@ -38,7 +38,9 @@ public class PlayerRendererBase extends RenderPlayerBase
 	@Override
 	public void renderModel(AbstractClientPlayer entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
-		super.renderModel(entity, f, f1, f2, f3, f4, f5);
-		this.renderLayers(entity, (float) f, (float) f1, (float) f2, f3, f4, f5, 0.0625F);
+		super.renderModel(entity, f, f1, f2, f3, f4, f5);	
+		
+		//Caused some weird render bugs... or maybe not? idk
+		//this.renderLayers(entity, (float) f, (float) f1, (float) f2, f3, f4, f5, 0.0625F);
 	}
 }

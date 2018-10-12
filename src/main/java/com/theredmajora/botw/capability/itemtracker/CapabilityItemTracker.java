@@ -1,13 +1,14 @@
 package com.theredmajora.botw.capability.itemtracker;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiFunction;
 
-import javax.annotation.Nullable;
-
-import org.omg.IOP.TAG_CODE_SETS;
-
+import com.google.common.collect.Lists;
 import com.theredmajora.botw.BOTW;
+import com.theredmajora.botw.capability.Storage;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class CapabilityItemTracker {
 
 	@CapabilityInject(IItemTracker.class)
-	public static final Capability<IItemTracker> BOTW_CAP = null;
+	public static final Capability<IItemTracker> BOTW_ITEMTRACKER_CAP = null;
 
 	public static final EnumFacing DEFAULT_FACING = null;
 
@@ -45,17 +46,20 @@ public class CapabilityItemTracker {
 	 * Register the capability.
 	 */
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IItemTracker.class, new Storage(), ItemTracker.class);
+		CapabilityManager.INSTANCE.register(IItemTracker.class, new Storage<IItemTracker>(), ItemTracker.class);
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
 
 	public static class ItemTracker implements IItemTracker
-	{
-		boolean shouldRenderBow, shouldRenderSlate, shouldRenderGlider;
+	{		
+		boolean shouldRenderSlate, shouldRenderGlider;
 		int arrowCount;
 		List<ItemStack> stacks = new ArrayList<>();
+		BOTWRenderAction renderAction = BOTWRenderAction.NONE;
+
 		EntityPlayer clientPlayer;
+		HashMap<Integer, Boolean> dirty=new HashMap<>();
 
 		public ItemTracker(EntityPlayer player) {
 			this.clientPlayer = player;
@@ -72,13 +76,23 @@ public class CapabilityItemTracker {
 		}
 
 		@Override
-		public void setShouldRenderSlate(boolean bool) {
-			this.shouldRenderSlate = bool;
+		public void setShouldRenderSlate(boolean bool)
+		{
+			if(this.shouldRenderSlate!=bool)
+			{
+				this.shouldRenderSlate = bool;
+				setDirty();
+			}
 		}
 
 		@Override
-		public void setShouldRenderGlider(boolean bool) {
-			this.shouldRenderGlider = bool;
+		public void setShouldRenderGlider(boolean bool)
+		{
+			if(this.shouldRenderGlider!=bool)
+			{
+				this.shouldRenderGlider = bool;
+				setDirty();
+			}
 		}
 
 		@Override
@@ -101,7 +115,9 @@ public class CapabilityItemTracker {
 				ItemStack stack=stacks.get(i);
 				list.appendTag(stack.writeToNBT(new NBTTagCompound()));
 			}
-			tagCompound.setTag("items", list);
+			tagCompound.setTag("Items", list);
+			
+			tagCompound.setInteger("RenderAction", renderAction.ordinal());
 			
 			return tagCompound;
 		}
@@ -109,11 +125,11 @@ public class CapabilityItemTracker {
 		@Override
 		public void readNBT(NBTTagCompound tag)
 		{
-			setShouldRenderSlate(tag.getBoolean("RenderSlate"));
-			setShouldRenderGlider(tag.getBoolean("RenderGlider"));	
-			setArrowCount(tag.getInteger("ArrowCount"));
+			this.shouldRenderSlate=tag.getBoolean("RenderSlate");
+			this.shouldRenderGlider=tag.getBoolean("RenderGlider");	
+			this.arrowCount=tag.getInteger("ArrowCount");
 			
-			NBTTagList list=tag.getTagList("items", Constants.NBT.TAG_COMPOUND);
+			NBTTagList list=tag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 			stacks=new ArrayList<>();
 			for(int i=0; i<list.tagCount(); i++)
 			{
@@ -123,6 +139,8 @@ public class CapabilityItemTracker {
 				
 				stacks.add(stack);
 			}
+			
+			this.renderAction=BOTWRenderAction.values()[tag.getInteger("RenderAction")];
 		}
 
 		@Override
@@ -140,34 +158,69 @@ public class CapabilityItemTracker {
 		@Override
 		public void setRenderingItemStacks(List<ItemStack> stacks)
 		{
-			this.stacks=stacks;
+			if(!this.stacks.equals(stacks))
+			{
+				this.stacks=stacks;
+				setDirty();
+			}
 		}
 
 		@Override
 		public void setArrowCount(int count)
 		{
-			this.arrowCount=count;
-		}
-	}
-
-	/**
-	 * Storage for the IWCustomInventory capability
-	 *
-	 */
-	public static class Storage implements Capability.IStorage<IItemTracker>
-	{
-
-		@Override
-		public NBTBase writeNBT(Capability<IItemTracker> capability, IItemTracker instance, EnumFacing side) {
-			return instance.writeNBT();
+			if(this.arrowCount!=count)
+			{
+				this.arrowCount=count;
+				setDirty();
+			}
 		}
 
 		@Override
-		public void readNBT(Capability<IItemTracker> capability, IItemTracker instance, EnumFacing side, NBTBase nbt) {
-			NBTTagCompound tagCompound = (NBTTagCompound) nbt;
-			instance.readNBT(tagCompound);
+		public Field getCapabilityField() throws NoSuchFieldException, SecurityException
+		{
+			return CapabilityItemTracker.class.getDeclaredField("BOTW_ITEMTRACKER_CAP");
 		}
 
+		@Override
+		public boolean isDirty(EntityPlayer player)
+		{
+			return dirty.getOrDefault(player.getEntityId(), true);
+		}
+
+		@Override
+		public void setDirty(EntityPlayer player, boolean dirty)
+		{
+			this.dirty.put(player.getEntityId(), dirty);
+		}
+
+		@Override
+		public void setDirty()
+		{
+			this.dirty.replaceAll(new BiFunction<Integer, Boolean, Boolean>()
+			{
+				@Override
+				public Boolean apply(Integer t, Boolean u)
+				{
+					return true;
+				}
+			});;
+		}
+
+		@Override
+		public BOTWRenderAction getRenderAction()
+		{
+			return renderAction;
+		}
+
+		@Override
+		public void setRenderAction(BOTWRenderAction renderAction)
+		{
+			if(this.renderAction!=renderAction)
+			{
+				this.renderAction=renderAction;
+				setDirty();
+			}
+		}
 	}
 
 
@@ -187,9 +240,12 @@ public class CapabilityItemTracker {
 
 			if(e.isWasDeath())
 			{
-				if(e.getOriginal().hasCapability(BOTW_CAP, null))
+				if(e.getOriginal().hasCapability(BOTW_ITEMTRACKER_CAP, null))
 				{
-					IItemTracker newTracker = e.getEntityPlayer().getCapability(BOTW_CAP, null); //FIXME		   
+					IItemTracker oldTracker = e.getOriginal().getCapability(BOTW_ITEMTRACKER_CAP, null);
+					IItemTracker newTracker = e.getEntityPlayer().getCapability(BOTW_ITEMTRACKER_CAP, null);
+					
+					newTracker.readNBT(oldTracker.writeNBT());
 				}
 			}
 		}
@@ -213,24 +269,24 @@ public class CapabilityItemTracker {
 
 		@Override
 		public NBTTagCompound serializeNBT() {
-			return (NBTTagCompound)BOTW_CAP.getStorage().writeNBT(BOTW_CAP, IItemTracker, EnumFacing.NORTH);
+			return (NBTTagCompound)BOTW_ITEMTRACKER_CAP.getStorage().writeNBT(BOTW_ITEMTRACKER_CAP, IItemTracker, EnumFacing.NORTH);
 		}
 
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
-			BOTW_CAP.getStorage().readNBT(BOTW_CAP, IItemTracker, EnumFacing.NORTH, nbt);
+			BOTW_ITEMTRACKER_CAP.getStorage().readNBT(BOTW_ITEMTRACKER_CAP, IItemTracker, EnumFacing.NORTH, nbt);
 		}
 
 		@Override
 		public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-			return capability == BOTW_CAP;
+			return capability == BOTW_ITEMTRACKER_CAP;
 		}
 
 		@Override
 		public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 
-			if (capability == BOTW_CAP) {
-				return BOTW_CAP.cast(this.IItemTracker);
+			if (capability == BOTW_ITEMTRACKER_CAP) {
+				return BOTW_ITEMTRACKER_CAP.cast(this.IItemTracker);
 			}
 			return null;
 		}

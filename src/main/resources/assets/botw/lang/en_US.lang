@@ -1,0 +1,24 @@
+item.gerudo_shield.name=Gerudo shield
+item.hylia_shield.name=Hylia shield
+item.sheikah_slate.name=Sheikah Slate
+item.paraglider.name=Paraglider
+item.stamina_vessel.name=Stamina Vessel
+item.heart_container.name=Heart Container
+item.spirit_orb.name=Spirit Orb
+item.debug_tool.name=Hyperlink Debugger
+
+tile.temp_ice.name=Sheikah ice
+tile.shrine.name=Shrine
+tile.shrine_lift.name=Shrine lift
+
+itemGroup.botw=TLoZ: Breath of the Wild
+itemGroup.botw.shields=TLoZ: Breath of the Wild: Shields
+
+slate.mode.round_bombs=Remote Round bombs
+
+key.botw.category=TLoZ: Breath of the Wild
+key.throw_entity.desc=Throw object
+key.drop_entity.desc=Drop object
+key.select_sheikah_module.desc=Select Sheikah-Module
+
+generator.hyrule=Hyrule

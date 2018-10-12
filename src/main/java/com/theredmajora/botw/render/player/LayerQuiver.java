@@ -31,10 +31,14 @@ public class LayerQuiver implements LayerRenderer<AbstractClientPlayer>
         GlStateManager.scale(0.4, 0.4, 0.4);
     	GlStateManager.translate(0.0F, 0.4F, 0.75F);
     	GlStateManager.rotate(180F, 0.0F, 1.0F, 0.0F);
-        if(entitylivingbaseIn.isSneaking())
+    	if(renderPlayer.getMainModel().isSneak)	//Sneaking
         {
         	GlStateManager.rotate(-30F, 1F, 0F, 0F);
         	GlStateManager.translate(0.0F, 0.25F, 0.0F);
+        }
+    	if(!renderPlayer.getMainModel().isSneak && entitylivingbaseIn.isSneaking())	//Climbing down
+        {
+        	GlStateManager.translate(0.0F, 0.5F, 0.0F);
         }
         RenderHelper.enableStandardItemLighting();
         this.modelQuiver.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entitylivingbaseIn);
