@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 public class EntityShrineLift extends EntityGolem
 {
-	protected static final AxisAlignedBB LIFT_AABB = new AxisAlignedBB(-4d/16d, 0.0D, -4d/16d, 20d/16d, 0d, 20d/16d);
+	public static final AxisAlignedBB LIFT_AABB = new AxisAlignedBB(-4d/16d, 0.0D, -4d/16d, 20d/16d, 0d, 20d/16d);
 	
 	private static final DataParameter<Float> HEIGHT = EntityDataManager.<Float>createKey(EntityShrineLift.class, DataSerializers.FLOAT);
 	private static final DataParameter<BlockPos> SHRINE = EntityDataManager.<BlockPos>createKey(EntityShrineLift.class, DataSerializers.BLOCK_POS);

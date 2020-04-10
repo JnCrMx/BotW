@@ -1,5 +1,6 @@
 package com.theredmajora.botw.proxy;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,11 +10,13 @@ import com.theredmajora.botw.item.BOTWItems;
 import com.theredmajora.botw.render.RenderHook;
 import com.theredmajora.botw.render.item.CustomTileEntityItemStackRenderer;
 
+import com.theredmajora.botw.util.BOTWActionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,15 +51,18 @@ public class ClientProxy extends CommonProxy
 		
 		TileEntityItemStackRenderer.instance=new CustomTileEntityItemStackRenderer();
 		
-		System.out.println("Hooking entity renders");
+		BOTW.logger.info("Hooking entity renders");
 		Map < Class <? extends Entity > , Render <? extends Entity >> entityRenderMap = Minecraft.getMinecraft().getRenderManager().entityRenderMap;
 		for(Class<? extends Entity> clazz : entityRenderMap.keySet())
 		{
-			Render render = entityRenderMap.get(clazz);
-			entityRenderMap.replace(clazz, new RenderHook(render.getRenderManager(), render));
-			System.out.println("Replaced render for "+clazz.getName()+" with "+RenderHook.class.getName());
+			if(BOTWActionHelper.SheikahSlate.isStasisTarget(clazz))  // only hook into stasis targets
+			{
+				Render<?> render = entityRenderMap.get(clazz);
+				entityRenderMap.replace(clazz, new RenderHook(render.getRenderManager(), render));
+				BOTW.logger.info("Replaced render for " + clazz.getName() + " with " + RenderHook.class.getName());
+			}
 		}
-		System.out.println("Hooking complete");
+		BOTW.logger.info("Hooking complete");
 	}
 
 	@Override

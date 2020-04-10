@@ -24,12 +24,15 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = BOTW.MODID, name = BOTW.MODNAME, version = BOTW.VERSION)
 public class BOTW
 {
 	@Instance
 	public static BOTW instance = new BOTW();
+
+	public static Logger logger;
 	
     public static final String MODID = "botw";
     public static final String MODNAME = "Breath of the Wild";
@@ -44,10 +47,12 @@ public class BOTW
     public static WorldType hyruleWorldType;
     
     public static BOTWEvents eventHandler;
-    
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
-    {	
+    {
+    	logger = event.getModLog();
+
     	RenderPlayerAPI.register(BOTW.MODID, PlayerRendererBase.class);
     	ModelPlayerAPI.register(BOTW.MODID, ModelRendererBase.class);
     	BOTWBlocks.init();

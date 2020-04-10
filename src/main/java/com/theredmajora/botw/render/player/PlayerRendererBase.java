@@ -21,7 +21,7 @@ public class PlayerRendererBase extends RenderPlayerBase
 		super(renderPlayerAPI);
 		layerRenderer.add(new LayerQuiver(this.renderPlayer));
 		layerRenderer.add(new LayerSheikahSlate(this.renderPlayer));
-		layerRenderer.add(new LayerWeapon(this.itemRenderer));
+		layerRenderer.add(new LayerWeapon(this.renderPlayer, this.itemRenderer));
 	}
 	
 	@Override

@@ -14,7 +14,6 @@ import com.theredmajora.botw.capability.itemtracker.IItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker.BOTWRenderAction;
 import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
 import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
-import com.theredmajora.botw.entity.IEntityCarriable;
 import com.theredmajora.botw.gui.GuiSheikahSlate;
 import com.theredmajora.botw.gui.GuiStaminaOverlay;
 import com.theredmajora.botw.item.BOTWItems;
@@ -25,34 +24,28 @@ import com.theredmajora.botw.packet.BOTWActionPacket;
 import com.theredmajora.botw.packet.BOTWActionPacket.BOTWPlayerAction;
 import com.theredmajora.botw.packet.BOTWPacketHandler;
 import com.theredmajora.botw.packet.UpdateClientPacket;
-import com.theredmajora.botw.proxy.ClientProxy;
+import com.theredmajora.botw.util.BOTWActionHelper;
 
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -62,6 +55,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -76,7 +70,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BOTWEvents
 {
 	private int ticksInAir = 0;
-	private int playerCheckCD = 10;
+	private int playerCheckCD = 5;
+	
+	@SideOnly(Side.CLIENT)
+	private boolean wasFirstPerson;
 	
 	@SideOnly(Side.CLIENT)
 	private GuiStaminaOverlay staminaOverlay;
@@ -105,6 +102,8 @@ public class BOTWEvents
 		
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		World world = player.worldObj;
+		
+		Minecraft mc = Minecraft.getMinecraft();
 
 		if (keyBindings[0].isPressed()) // Swap?
 		{
@@ -124,73 +123,20 @@ public class BOTWEvents
 		}
 		else if(keyBindings[1].isPressed())	//Throw
 		{
-			if(!player.getPassengers().isEmpty())
-			{
-				for (Entity entity : player.getPassengers())
-				{
-					if(entity instanceof IEntityCarriable)
-					{
-						IEntityCarriable carriable=(IEntityCarriable)entity;
-						if(carriable.isThrowable())
-						{
-							BOTWActionPacket packet=new BOTWActionPacket(BOTWPlayerAction.THROW_ENTITY, 0);
-							BOTWPacketHandler.INSTANCE.sendToServer(packet);
-							
-							carriable.throwEntity(player);
-						}
-					}
-				}
-			}
+			BOTWActionHelper.Carrying.clientThrowEntity(player);
 		}
 		else if(keyBindings[2].isPressed())	//Drop
 		{
-			if(!player.getPassengers().isEmpty())
-			{
-				for (Entity entity : player.getPassengers())
-				{
-					if(entity instanceof IEntityCarriable)
-					{
-						IEntityCarriable carriable=(IEntityCarriable)entity;
-						if(carriable.isDroppable())
-						{
-							BOTWActionPacket packet=new BOTWActionPacket(BOTWPlayerAction.DROP_ENTITY, 0);
-							BOTWPacketHandler.INSTANCE.sendToServer(packet);
-							
-							carriable.dropEntity(player);
-						}
-					}
-				}
-			}
+			BOTWActionHelper.Carrying.clientDropEntity(player);
 		}
 		else if(keyBindings[3].isPressed())	//Sheikah gui
 		{
 			player.openGui(BOTW.instance, GuiSheikahSlate.GUI_ID, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
 		}
-		//Climbing "hook"
-		else if(Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())	//"Hook" for Minecraft jump KeyBinding
+		//Climbing & Backflip "hook"
+		else if(mc.gameSettings.keyBindJump.isPressed())	//"Hook" for Minecraft jump KeyBinding
 		{						
-			if(!player.onGround)
-			{		
-				float yaw = player.rotationYaw;
-				double x = player.posX - MathHelper.sin((float) Math.toRadians(yaw))*0.6;
-				double z = player.posZ + MathHelper.cos((float) Math.toRadians(yaw))*0.6;
-					
-				BlockPos pos = new BlockPos(x, player.posY, z);
-				IBlockState state1 = world.getBlockState(pos);
-				IBlockState state2 = world.getBlockState(pos.add(0, 1, 0));
-				if(state1.isFullBlock() || state2.isFullBlock())
-				{	
-					IPlayerTracker playerTracker = player.getCapability(CapabilityPlayerTracker.BOTW_PLAYERTRACKER_CAP, null);
-					if(!playerTracker.isExhausted() && !player.isSneaking())
-					{	
-						BOTWActionPacket packet=new BOTWActionPacket(BOTWPlayerAction.CLIMB_JUMP, 0);
-						BOTWPacketHandler.INSTANCE.sendToServer(packet);
-						
-						playerTracker.setStamina(playerTracker.getStamina()-100);
-						player.setVelocity(player.motionX, 0.5, player.motionZ);
-					}
-				}
-			}
+			BOTWActionHelper.Climbing.clientClimbJump(player, world);
 		}
 	}
 
@@ -206,69 +152,13 @@ public class BOTWEvents
 			{
 				ticksInAir++;
 				
-				//Climb physics
-				float yaw = entity.rotationYaw;
-				double x = entity.posX - Math.sin((float) Math.toRadians(yaw))*0.75;
-				double z = entity.posZ + Math.cos((float) Math.toRadians(yaw))*0.75;
-					
-				BlockPos pos = new BlockPos(x, entity.posY, z);
-				IBlockState state1 = world.getBlockState(pos);
-				IBlockState state2 = world.getBlockState(pos.add(0, 1, 0));
-				if(state1.isFullBlock() || state2.isFullBlock())
-				{			
-					IPlayerTracker playerTracker = entity.getCapability(CapabilityPlayerTracker.BOTW_PLAYERTRACKER_CAP, null);
-					
-					boolean surface = world.getPrecipitationHeight(entity.getPosition()).subtract(entity.getPosition()).getY()<=0;
-					boolean raining = world.getBiome(entity.getPosition()).canRain() && world.isRaining() && surface;	//Everybody loves rain in BotW!
-					
-					if(!playerTracker.isExhausted() && !raining)
-					{
-						entity.fallDistance=1.0f;
-
-						if(entity.isSneaking())
-						{
-							playerTracker.setStamina(playerTracker.getStamina()-5);
-							entity.setVelocity(entity.motionX, -0.1, entity.motionZ);
-						}
-						else
-						{
-							if(entity.moveForward>0 && entity.motionY<0.1)	//Won't be called serverside
-							{
-								BOTWActionPacket packet=new BOTWActionPacket(BOTWPlayerAction.CLIMB_UP, 0);
-								BOTWPacketHandler.INSTANCE.sendToServer(packet);			
-									
-								playerTracker.setStamina(playerTracker.getStamina()-10);
-								entity.setVelocity(entity.motionX, 0.05, entity.motionZ);
-							}
-							else if(entity.moveForward<0)	//Won't be called serverside
-							{
-								BOTWActionPacket packet=new BOTWActionPacket(BOTWPlayerAction.CLIMB_DROP, 0);
-								BOTWPacketHandler.INSTANCE.sendToServer(packet);
-								
-								//Jump away
-								entity.setVelocity(MathHelper.sin((float) Math.toRadians(yaw))*0.2, 0, -MathHelper.cos((float) Math.toRadians(yaw))*0.2);
-							}
-							else if(entity.motionY<0)	//Will be called clientside and serverside
-							{								
-								//Don't fall
-								entity.setVelocity(entity.motionX, 0, entity.motionZ);
-								
-								entity.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null).setRenderAction(BOTWRenderAction.NONE);
-							}
-						}
-						
-						//Code for ItemDebugTool
-						if(entity.getHeldItemMainhand()!=null && entity.getHeldItemMainhand().getItem()==BOTWItems.debugTool)
-						{
-							world.setBlockState(pos, Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED));
-							world.setBlockState(pos.add(0, 1, 0), Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PINK));
-						}
-						if(entity.getHeldItemOffhand()!=null && entity.getHeldItemOffhand().getItem()==BOTWItems.debugTool)
-						{
-							world.setBlockState(pos, Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLUE));
-							world.setBlockState(pos.add(0, 1, 0), Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.LIGHT_BLUE));
-						}
-					}
+				if(!world.isRemote)
+				{
+					BOTWActionHelper.Climbing.serverClimbTick(entity, world);
+				}
+				else if(entity == Minecraft.getMinecraft().thePlayer)
+				{
+					BOTWActionHelper.Climbing.clientClimbTick(entity, world);
 				}
 			}
 			else
@@ -329,6 +219,24 @@ public class BOTWEvents
 			
 			if(staminaOverlay.shouldRender())
 				staminaOverlay.render();
+			
+			EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
+			ItemStack stack = Minecraft.getMinecraft().thePlayer.getHeldItemMainhand();
+			if (stack != null && stack.getItem()==BOTWItems.sheikahSlate && stack.getTagCompound() != null && stack.getTagCompound().hasKey("mode")
+					&& stack.getTagCompound().getString("mode").equals("stasis"))
+			{
+	    		if(!renderer.isShaderActive())
+	    		{
+	                renderer.loadShader(new ResourceLocation(BOTW.MODID, "shaders/post/stasis.json"));
+	    		}
+	    	}
+	    	else
+	    	{
+	    		if(renderer.isShaderActive())
+	    		{
+	    			renderer.stopUseShader();
+	    		}
+	    	}
 		}
 	}
 	
@@ -339,8 +247,10 @@ public class BOTWEvents
 		{			
 			EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
 			if(!player.worldObj.isRemote)
-			{				
-				if(player.getStatFile().readStat(StatList.LEAVE_GAME)==0 && player.getStatFile().readStat(StatList.DEATHS)==0)
+			{
+				if(player.getStatFile().readStat(StatList.LEAVE_GAME)==0 &&
+						player.getStatFile().readStat(StatList.DEATHS)==0 &&
+						player.getStatFile().readStat(StatList.PLAY_ONE_MINUTE)==0)
 				{
 					if(player.worldObj.getWorldType()==BOTW.hyruleWorldType)
 					{
@@ -367,76 +277,13 @@ public class BOTWEvents
 	{
 		if(event.side.isServer() && event.phase==Phase.START)
 		{
-			//Exceptions may occur if you remove entries from a map/list you're currently iterating over
-			ArrayList<Integer> toRemove = new ArrayList<>();
-			
-			for(int entityId : stasisEntityTimes.keySet())
-			{
-				int remainingTicks = stasisEntityTimes.get(entityId);
-				Entity entity = event.world.getEntityByID(entityId);
-				
-				if(entity!=null && event.world!=null)
-				{
-					EntityPlayer player = (EntityPlayer) event.world.getEntityByID(stasisEntityPlayers.get(entityId));
-					IPlayerTracker tracker = player.getCapability(CapabilityPlayerTracker.BOTW_PLAYERTRACKER_CAP, null);
-					
-					if(remainingTicks>0)
-					{
-						entity.setNoGravity(true);
-						entity.setSilent(true);
-						if(entity instanceof EntityLiving)
-						{
-							EntityLiving living = (EntityLiving)entity;
-							
-							living.setNoAI(true);
-						}
-						
-						Vec3d position = stasisEntityPositions.get(entityId);
-						Vec2f rotation = stasisEntityRotations.get(entityId);
-						// rotation.x = yaw
-						// rotation.y = pitch
-						entity.setPositionAndRotation(position.xCoord, position.yCoord, position.zCoord, rotation.x, rotation.y);
-						
-						entity.ticksExisted = stasisEntityTicksExisted.get(entityId);
-						
-						remainingTicks--;
-						stasisEntityTimes.replace(entityId, remainingTicks);
-						tracker.setCurrentStasisTime(remainingTicks);
-					}
-					else
-					{
-						entity.setGlowing(false);
-						entity.setNoGravity(false);
-						entity.setSilent(false);
-						
-						if(entity instanceof EntityLiving)
-						{
-							EntityLiving living = (EntityLiving)entity;
-							
-							living.setNoAI(false);
-						}
-						
-						Vec3d motion = stasisEntityMotions.get(entityId);
-						entity.motionX = motion.xCoord;
-						entity.motionY = motion.yCoord;
-						entity.motionZ = motion.zCoord;
-
-						toRemove.add(entityId);
-						tracker.setCurrentStasisEntity(-1);
-					}
-				}
-			}
-			
-			
-			
-			toRemove.forEach(entityId->
-			{
-				stasisEntityTimes.remove(entityId);
-				stasisEntityPositions.remove(entityId);
-				stasisEntityRotations.remove(entityId);
-				stasisEntityTicksExisted.remove(entityId);
-				stasisEntityMotions.remove(entityId);
-			});
+			BOTWActionHelper.SheikahSlate.serverStasisTick(event.world,
+					stasisEntityTimes,
+					stasisEntityPositions,
+					stasisEntityRotations,
+					stasisEntityTicksExisted,
+					stasisEntityMotions,
+					stasisEntityPlayers);
 		}
 	}
 	
@@ -450,32 +297,17 @@ public class BOTWEvents
 			LinkedList<ITracker> trackers=new LinkedList<>();
 				
 			IPlayerTracker playerTracker = event.player.getCapability(CapabilityPlayerTracker.BOTW_PLAYERTRACKER_CAP, null);
+			IItemTracker itemTracker = event.player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
 			
-			if(playerTracker.getStamina()>=playerTracker.getMaxStamina())
-			{
-				playerTracker.setStamina(playerTracker.getMaxStamina());
-				playerTracker.setExhausted(false);
-			}
-			if(playerTracker.getStamina()<=0)
-			{
-				playerTracker.setStamina(0);
-				playerTracker.setExhausted(true);
-			}
+			BOTWActionHelper.Stamina.serverStaminaTick(player, playerTracker);
 			
-			if(player.isSprinting() && !playerTracker.isExhausted())
+			if(itemTracker.getBackflipTime()>0)
 			{
-				playerTracker.setStamina(playerTracker.getStamina()-10);
-			}
-			else if(playerTracker.getStamina()<playerTracker.getMaxStamina() && player.onGround)
-			{
-				if(playerTracker.isExhausted())
+				itemTracker.setBackflipTime(itemTracker.getBackflipTime()-1);
+				if(itemTracker.getBackflipTime()==0)
 				{
-					player.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 1, 1, false, false));
-					playerTracker.setStamina(playerTracker.getStamina()+5);
-				}
-				else
-				{
-					playerTracker.setStamina(playerTracker.getStamina()+10);
+					itemTracker.setRenderAction(BOTWRenderAction.NONE);
+					event.player.setEntityInvulnerable(false);
 				}
 			}
 			
@@ -489,7 +321,7 @@ public class BOTWEvents
 				BlockPos pos2 = new BlockPos(player.getPosition().getX() - 50, player.getPosition().getY() - 50, player.getPosition().getZ() - 50);
 
 				List<EntityPlayer> allPlayers = worldobj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos1, pos2));
-				this.playerCheckCD = 10 + rand.nextInt(10);// the random will smooth the load over ticks 
+				this.playerCheckCD = 2 + rand.nextInt(3);// the random will smooth the load over ticks 
 
 				if(!allPlayers.isEmpty())
 				{					
@@ -526,6 +358,34 @@ public class BOTWEvents
 			for (ITracker iTracker : trackerArray)
 			{
 				iTracker.setDirty(player, false);
+			}
+		}
+		else
+		{
+			IItemTracker itemTracker = event.player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
+			if(itemTracker.getBackflipTime()>0)
+			{
+				if(event.player==Minecraft.getMinecraft().thePlayer)
+				{
+					if(Minecraft.getMinecraft().gameSettings.thirdPersonView==0)
+					{
+						Minecraft.getMinecraft().gameSettings.thirdPersonView=1;
+						wasFirstPerson=true;
+					}
+				}
+				itemTracker.setBackflipTime(itemTracker.getBackflipTime()-1);
+			}
+			if(itemTracker.getBackflipTime()==0)
+			{
+				itemTracker.setRenderAction(BOTWRenderAction.NONE);
+				if(event.player==Minecraft.getMinecraft().thePlayer)
+				{
+					if(wasFirstPerson)
+					{
+						Minecraft.getMinecraft().gameSettings.thirdPersonView=0;
+						wasFirstPerson=false;
+					}
+				}
 			}
 		}
 	}
@@ -608,57 +468,14 @@ public class BOTWEvents
 			}
 		}
 		
+		//FIXME: Move!!!
 		if(!livingBase.worldObj.isRemote)
 		{
-			if(stasisEntityMotions.containsKey(livingBase.getEntityId()))
-			{
-				if(event.getSource().getDamageLocation()!=null)
-				{
-					event.setCanceled(true);
-						
-					Vec3d attacker = event.getSource().getDamageLocation();
-					Vec3d target = livingBase.getPositionVector();
-						
-					Vec3d hit = attacker.subtract(target).normalize();
-					Vec3d direction = hit.normalize().scale(-1.0d);
-					Vec3d motion = direction.scale(event.getAmount()*0.05d);
-					
-					Vec3d oldMotion = stasisEntityMotions.get(livingBase.getEntityId());
-					Vec3d newMotion = oldMotion.add(motion);
-					
-					stasisEntityMotions.replace(livingBase.getEntityId(), newMotion);
-					
-					System.out.println(livingBase.worldObj.isRemote);
-					System.out.println(stasisEntityMotions);
-				}
-			}
+			BOTWActionHelper.SheikahSlate.serverStasisAttack(event, livingBase, stasisEntityMotions);
 		}
 		else
 		{
-			if(BOTW.proxy instanceof ClientProxy)
-			{
-				ClientProxy proxy = (ClientProxy) BOTW.proxy;
-				if(proxy.stasisEntityMotions.containsKey(livingBase.getEntityId()))
-				{					
-					Vec3d attacker = event.getSource().getDamageLocation();
-					Vec3d target = livingBase.getPositionVector();
-					
-					if(target==null || attacker==null)
-						return;
-						
-					Vec3d hit = attacker.subtract(target).normalize();
-					Vec3d direction = hit.normalize().scale(-1.0d);
-					Vec3d motion = direction.scale(event.getAmount()*0.05d);
-					
-					Vec3d oldMotion = proxy.stasisEntityMotions.get(livingBase.getEntityId());
-					Vec3d newMotion = oldMotion.add(motion);
-					
-					proxy.stasisEntityMotions.replace(livingBase.getEntityId(), newMotion);
-					
-					System.out.println(livingBase.worldObj.isRemote);
-					System.out.println(stasisEntityMotions);
-				}
-			}
+			BOTWActionHelper.SheikahSlate.clientStasisAttack(event, livingBase);
 		}
 	}
 	
@@ -679,6 +496,32 @@ public class BOTWEvents
 					double posZ = player.posZ;
 					
 			        server.spawnParticle(EnumParticleTypes.getByName("blue_splash"), posX, posY, posZ, 1000, 0, 0, 0, 0, new int[0]);
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onLivingJump(LivingJumpEvent event)
+	{
+		if(event.getEntityLiving() instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+			if(player.worldObj.isRemote)	//Never execute this on server side. Input is handled by client.
+			{
+				if(player.moveForward<0)
+				{
+					if(player.isActiveItemStackBlocking())
+					{					
+						BOTWActionPacket packet=new BOTWActionPacket(BOTWPlayerAction.BACKFLIP, 0);
+						BOTWPacketHandler.INSTANCE.sendToServer(packet);
+
+						float yaw = player.rotationYaw;
+						double x = + Math.sin((float) Math.toRadians(yaw))*0.5;
+						double z = - Math.cos((float) Math.toRadians(yaw))*0.5;
+
+						player.setVelocity(x, 0.5, z);
+					}
 				}
 			}
 		}

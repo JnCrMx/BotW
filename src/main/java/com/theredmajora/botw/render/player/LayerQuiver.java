@@ -1,5 +1,9 @@
 package com.theredmajora.botw.render.player;
 
+import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
+import com.theredmajora.botw.capability.itemtracker.IItemTracker;
+import com.theredmajora.botw.capability.itemtracker.IItemTracker.BOTWRenderAction;
+
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -31,7 +35,15 @@ public class LayerQuiver implements LayerRenderer<AbstractClientPlayer>
         GlStateManager.scale(0.4, 0.4, 0.4);
     	GlStateManager.translate(0.0F, 0.4F, 0.75F);
     	GlStateManager.rotate(180F, 0.0F, 1.0F, 0.0F);
-    	if(renderPlayer.getMainModel().isSneak)	//Sneaking
+    	
+    	IItemTracker tracker = entitylivingbaseIn.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
+    	
+    	if(tracker.getRenderAction()==BOTWRenderAction.BACKFLIP)
+    	{
+    		GlStateManager.rotate(-50F, 1F, 0F, 0F);
+    		GlStateManager.translate(0.0f, -0.4f, -0.4f);
+    	}
+    	else if(renderPlayer.getMainModel().isSneak)	//Sneaking
         {
         	GlStateManager.rotate(-30F, 1F, 0F, 0F);
         	GlStateManager.translate(0.0F, 0.25F, 0.0F);

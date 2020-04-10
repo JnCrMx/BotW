@@ -13,16 +13,19 @@ public interface IItemTracker extends ITracker{
 	public List<ItemStack> getRenderingItemStacks();
 	public int getArrowCount();
 	public BOTWRenderAction getRenderAction();
+	public int getBackflipTime();
 	
 	public void setShouldRenderSlate(boolean bool);
 	public void setShouldRenderGlider(boolean bool);
 	public void setRenderingItemStacks(List<ItemStack> stacks);
 	public void setArrowCount(int count);
 	public void setRenderAction(BOTWRenderAction renderAction);
+	public void setBackflipTime(int time);
 	
 	public static enum BOTWRenderAction
 	{
 		NONE,
-		CLIMB_UP
+		CLIMB_UP,
+		BACKFLIP
 	}
 }

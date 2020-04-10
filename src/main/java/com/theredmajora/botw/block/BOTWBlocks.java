@@ -10,6 +10,7 @@ public class BOTWBlocks
 {
 	public static Block temp_ice;
 	public static Block shrine_lift;
+	public static Block shrine_wall;
 	
 	public static BlockStatueOfTheGoddess statueOfTheGoddess;
 	
@@ -18,6 +19,7 @@ public class BOTWBlocks
 		temp_ice = register(new BlockTempIce());
 		shrine_lift = register(new BlockShrineLift());
 		statueOfTheGoddess = register(new BlockStatueOfTheGoddess());
+		shrine_wall = register(new BlockShrineWall());
 	}
 	
 	private static <T extends Block> T register(T block, ItemBlock itemBlock)

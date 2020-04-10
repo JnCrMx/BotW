@@ -53,6 +53,7 @@ public class CapabilityItemTracker {
 		int arrowCount;
 		List<ItemStack> stacks = new ArrayList<>();
 		BOTWRenderAction renderAction = BOTWRenderAction.NONE;
+		int backflipTime;
 
 		EntityPlayer clientPlayer;
 		HashMap<Integer, Boolean> dirty=new HashMap<>();
@@ -114,6 +115,7 @@ public class CapabilityItemTracker {
 			tagCompound.setTag("Items", list);
 			
 			tagCompound.setInteger("RenderAction", renderAction.ordinal());
+			tagCompound.setInteger("BackflipTime", backflipTime);
 			
 			return tagCompound;
 		}
@@ -137,6 +139,7 @@ public class CapabilityItemTracker {
 			}
 			
 			this.renderAction=BOTWRenderAction.values()[tag.getInteger("RenderAction")];
+			this.backflipTime=tag.getInteger("BackflipTime");
 		}
 
 		@Override
@@ -214,6 +217,22 @@ public class CapabilityItemTracker {
 			if(this.renderAction!=renderAction)
 			{
 				this.renderAction=renderAction;
+				setDirty();
+			}
+		}
+
+		@Override
+		public int getBackflipTime()
+		{
+			return backflipTime;
+		}
+
+		@Override
+		public void setBackflipTime(int backflipTime)
+		{
+			if(this.backflipTime!=backflipTime)
+			{
+				this.backflipTime=backflipTime;
 				setDirty();
 			}
 		}

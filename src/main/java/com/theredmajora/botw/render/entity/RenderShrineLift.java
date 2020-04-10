@@ -32,24 +32,25 @@ public class RenderShrineLift extends Render<EntityShrineLift>
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
         GlStateManager.disableLighting();
-		
-        GlStateManager.translate(x, entity.getEntityBoundingBox().maxY+y, z);
+
+        GlStateManager.translate(x, y, z);
+        GlStateManager.translate(0, entity.getHeight(), 0);
 
 		bindTexture(getEntityTexture(entity));
 		
         GL11.glBegin(GL11.GL_QUADS);
 
         GL11.glTexCoord2d(0, 0);
-        GL11.glVertex3d(entity.getEntityBoundingBox().minX, 0, entity.getEntityBoundingBox().minZ);
+        GL11.glVertex3d(EntityShrineLift.LIFT_AABB.minX, 0, EntityShrineLift.LIFT_AABB.minZ);
 
         GL11.glTexCoord2d(0, 1);
-        GL11.glVertex3d(entity.getEntityBoundingBox().minX, 0, entity.getEntityBoundingBox().maxZ);
+        GL11.glVertex3d(EntityShrineLift.LIFT_AABB.minX, 0, EntityShrineLift.LIFT_AABB.maxZ);
 
         GL11.glTexCoord2d(1, 1);
-        GL11.glVertex3d(entity.getEntityBoundingBox().maxX, 0, entity.getEntityBoundingBox().maxZ);
+        GL11.glVertex3d(EntityShrineLift.LIFT_AABB.maxX, 0, EntityShrineLift.LIFT_AABB.maxZ);
 
         GL11.glTexCoord2d(1, 0);
-        GL11.glVertex3d(entity.getEntityBoundingBox().maxX, 0, entity.getEntityBoundingBox().minZ);
+        GL11.glVertex3d(EntityShrineLift.LIFT_AABB.maxX, 0, EntityShrineLift.LIFT_AABB.minZ);
 		
 		GL11.glEnd();
 

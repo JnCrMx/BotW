@@ -2,12 +2,14 @@ package com.theredmajora.botw.render.player;
 
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker;
+import com.theredmajora.botw.capability.itemtracker.IItemTracker.BOTWRenderAction;
 import com.theredmajora.botw.item.ItemBOTWShield;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,12 +24,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class LayerWeapon implements LayerRenderer<EntityPlayer>
 {
+    private final RenderPlayer renderPlayer;
     private final RenderItem itemRenderer;
 	private float stacksRendered = 0;
     
-    public LayerWeapon(RenderItem itemRenderer)
+    public LayerWeapon(RenderPlayer renderPlayer, RenderItem itemRenderer)
     {
     	this.itemRenderer = itemRenderer;
+    	this.renderPlayer = renderPlayer;
 	}
 
 	public void doRenderLayer(EntityPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
@@ -85,15 +89,27 @@ public class LayerWeapon implements LayerRenderer<EntityPlayer>
                 GlStateManager.scale(1.0F, 1.0F, 1.0F);
                 
                 float posOffset = stacksRendered / 20;
-                
                 GlStateManager.translate(0.0F, 0.3F, 0.1F + posOffset);
-                GlStateManager.rotate(90.0F - (90.0F * stacksRendered), 0.0F, 0.0F, 1.0F);
+                
+            	IItemTracker tracker = entity.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
+            	
+            	if(tracker.getRenderAction()==BOTWRenderAction.BACKFLIP)
+            	{
+            		GlStateManager.rotate(50F, 1F, 0F, 0F);
+                	GlStateManager.translate(0.0F, 0.2F, 0.1F);
+            	}
+            	else if(renderPlayer.getMainModel().isSneak)	//Sneaking
+                {
+                	GlStateManager.rotate(30.0F, 1F, 0F, 0F);
+                	GlStateManager.translate(0.0F, 0.2F, 0.1F);
+                }
                 
                 if (!this.itemRenderer.shouldRenderItemIn3D(item) || item.getItem() instanceof ItemSkull)
                 {
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                 }
-
+                GlStateManager.rotate(90.0F - (90.0F * stacksRendered), 0.0F, 0.0F, 1.0F);
+                
                 GlStateManager.pushAttrib();
                 RenderHelper.enableStandardItemLighting();
                 this.itemRenderer.renderItem(item, ItemCameraTransforms.TransformType.FIXED);
@@ -122,8 +138,23 @@ public class LayerWeapon implements LayerRenderer<EntityPlayer>
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                 }
                 
-                GlStateManager.rotate(180, 0, 1, 0);
-                GlStateManager.translate(-0.1, 0.3, -0.1);
+            	IItemTracker tracker = entity.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
+            	
+            	if(tracker.getRenderAction()==BOTWRenderAction.BACKFLIP)
+            	{
+            		GlStateManager.rotate(50F, 1F, 0F, 0F);
+            		GlStateManager.translate(-0.1, 0.25, 0.075);
+            	}
+            	else if(renderPlayer.getMainModel().isSneak)	//Sneaking
+                {
+                	GlStateManager.rotate(30F, 1F, 0F, 0F);
+            		GlStateManager.translate(-0.1, 0.4, 0.05);
+                }
+            	else
+            	{
+            		GlStateManager.rotate(180, 0, 1, 0);
+            		GlStateManager.translate(-0.1, 0.3, -0.1);
+            	}
 
                 GlStateManager.pushAttrib();
                 RenderHelper.enableStandardItemLighting();

@@ -11,7 +11,9 @@ import org.lwjgl.opengl.GL11;
 import com.theredmajora.botw.BOTW;
 import com.theredmajora.botw.capability.playertracker.CapabilityPlayerTracker;
 import com.theredmajora.botw.capability.playertracker.IPlayerTracker;
+import com.theredmajora.botw.item.BOTWItems;
 import com.theredmajora.botw.proxy.ClientProxy;
+import com.theredmajora.botw.util.BOTWActionHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -26,6 +28,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -112,6 +115,9 @@ public class RenderHook extends Render
 				//TODO: Test this on server; Should work...; Tested on local loopback LAN world
 				//We might need a packet for this
 				EntityLivingBase living = (EntityLivingBase) entity;
+				
+				ItemStack stack = Minecraft.getMinecraft().thePlayer.getHeldItemMainhand();
+				
 				if(BOTW.proxy instanceof ClientProxy)
 				{
 					ClientProxy proxy = (ClientProxy) BOTW.proxy;
@@ -174,9 +180,11 @@ public class RenderHook extends Render
 							}
 						}
 
+						GL11.glDisable(GL11.GL_DEPTH_TEST);
 						GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 						render.doRender(entity, x, y, z, entityYaw, 0);
 						GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+						GL11.glEnable(GL11.GL_DEPTH_TEST);
 						
 						//TODO: Render effects (pulsing, etc.)
 						
@@ -275,6 +283,14 @@ public class RenderHook extends Render
 						GlStateManager.popMatrix();
 						
 						return;
+					}
+					else if (stack != null && stack.getItem()==BOTWItems.sheikahSlate && stack.getTagCompound() != null && stack.getTagCompound().hasKey("mode")
+							&& stack.getTagCompound().getString("mode").equals("stasis"))
+					{	
+						if(BOTWActionHelper.SheikahSlate.isStasisTarget(entity))
+						{
+							setRenderOutlines(true);
+						}
 					}
 					else if(entity.getTeam()!=null)
 					{		

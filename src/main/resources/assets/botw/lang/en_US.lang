@@ -10,6 +10,7 @@ item.debug_tool.name=Hyperlink Debugger
 tile.temp_ice.name=Sheikah ice
 tile.shrine.name=Shrine
 tile.shrine_lift.name=Shrine lift
+tile.shrine_wall.name=Shrine wall
 
 itemGroup.botw=TLoZ: Breath of the Wild
 itemGroup.botw.shields=TLoZ: Breath of the Wild: Shields

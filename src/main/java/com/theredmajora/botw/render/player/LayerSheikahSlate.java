@@ -2,6 +2,7 @@ package com.theredmajora.botw.render.player;
 
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker;
+import com.theredmajora.botw.capability.itemtracker.IItemTracker.BOTWRenderAction;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -39,11 +40,18 @@ public class LayerSheikahSlate implements LayerRenderer<EntityPlayer>
         	GlStateManager.scale(0.4, 0.4, 0.4);
         	GlStateManager.translate(0.65F, 1.1F, 0F);
         	GlStateManager.rotate(270F, 0F, 1F, 0F);
-        	if(entitylivingbaseIn.isSneaking())
+        	
+        	if(tracker.getRenderAction()==BOTWRenderAction.BACKFLIP)
+        	{
+        		GlStateManager.rotate(-50, 0, 0, 1);
+        		GlStateManager.translate(0.75f, -0.0f, 0.0f);
+        	}
+        	else if(entitylivingbaseIn.isSneaking())
         	{
         		GlStateManager.rotate(40F, 0F, 0F, -1F);
         		GlStateManager.translate(0.0F, 0.45F, 0.0F);
         	}
+        	
         	RenderHelper.enableStandardItemLighting();
         	this.modelSlate.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entitylivingbaseIn);
         	this.modelSlate.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);

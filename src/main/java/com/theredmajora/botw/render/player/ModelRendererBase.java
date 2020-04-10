@@ -1,5 +1,7 @@
 package com.theredmajora.botw.render.player;
 
+import org.lwjgl.opengl.GL11;
+
 import com.theredmajora.botw.capability.itemtracker.CapabilityItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker;
 import com.theredmajora.botw.capability.itemtracker.IItemTracker.BOTWRenderAction;
@@ -26,6 +28,15 @@ public class ModelRendererBase extends ModelPlayerBase
 	
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{		
+		EntityPlayer player = (EntityPlayer) entity;
+		IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
+		
+		if(tracker.getRenderAction()==BOTWRenderAction.BACKFLIP)
+		{
+			int backflipTime = tracker.getBackflipTime();
+			GL11.glRotated(backflipTime*10+(f2%10), 1, 0, 0);
+		}
+		
 		super.render(entity, f, f1, f2, f3, f4, f5);
 	}
 	
@@ -35,6 +46,8 @@ public class ModelRendererBase extends ModelPlayerBase
 		
 		EntityPlayer player = (EntityPlayer) entity;
 		ItemStack stack = player.inventory.getCurrentItem();
+
+		IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
 		
 		if (stack != null)
 		{
@@ -108,9 +121,7 @@ public class ModelRendererBase extends ModelPlayerBase
 			IBlockState state1 = world.getBlockState(pos);
 			IBlockState state2 = world.getBlockState(pos.add(0, 1, 0));
 			if (state2.isFullBlock())	//Climb with arms
-			{
-				IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
-				
+			{				
 				if(player.isSneaking())
 				{
 					modelBiped.bipedLeftArm.rotateAngleX  = 	-(float) Math.toRadians(170);
@@ -142,7 +153,6 @@ public class ModelRendererBase extends ModelPlayerBase
 			}
 			if(state1.isFullBlock())	//Climb with legs
 			{
-				IItemTracker tracker = player.getCapability(CapabilityItemTracker.BOTW_ITEMTRACKER_CAP, null);
 				if(player.isSneaking())
 				{
 					modelBiped.bipedLeftLeg.rotateAngleX	=	-(float) Math.toRadians(10);
@@ -178,6 +188,24 @@ public class ModelRendererBase extends ModelPlayerBase
 					modelBiped.bipedRightLeg.rotateAngleZ	=	(float) Math.toRadians(10);
 				}
 			}
+		}
+
+		if(tracker.getRenderAction()==BOTWRenderAction.BACKFLIP)
+		{
+			modelBiped.bipedBody.rotateAngleX		=	(float) Math.toRadians(45);
+			modelBiped.bipedHead.rotateAngleX		=	(float) Math.toRadians(60);
+			
+			modelBiped.bipedLeftLeg.rotateAngleX	=	(float) Math.toRadians(-40);
+			modelBiped.bipedRightLeg.rotateAngleX	=	(float) Math.toRadians(-40);
+			modelBiped.bipedLeftLeg.offsetZ			=	0.5f;
+			modelBiped.bipedRightLeg.offsetZ		=	0.5f;
+			modelBiped.bipedLeftLeg.offsetY			=	-0.25f;
+			modelBiped.bipedRightLeg.offsetY		=	-0.25f;
+		}
+		else
+		{
+			modelBiped.bipedLeftLeg.offsetZ 		=	0.0f;
+			modelBiped.bipedRightLeg.offsetZ 		= 	0.0f;
 		}
 	}
 }
